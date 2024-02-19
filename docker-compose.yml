@@ -1,0 +1,36 @@
+version: '3'
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: mylaravelapp
+    container_name: mylaravelapp
+    restart: unless-stopped
+    ports:
+      - "8001:8000"
+    volumes:
+      - ./src:/var/www/html
+    networks:
+      - app-network
+
+  db:
+    image: mysql:5.7.44
+    container_name: mysql
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "3300:3306"
+    environment:
+      MYSQL_DATABASE: mylaraveldb
+      MYSQL_ROOT_PASSWORD: takemyhand
+      MYSQL_USER: mylaraveluser
+      MYSQL_PASSWORD: takemyhand
+    volumes:
+      - ./src:/var/lib/mysql
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
