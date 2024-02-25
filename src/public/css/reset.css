@@ -1,0 +1,182 @@
+/* Reset CSS - Comprehensive Reset */
+
+/* Box sizing rules */
+*, *:before, *:after {
+    box-sizing: border-box;
+}
+
+html{
+    /* Set base font size to 10px (62.5% of 16px) */
+    font-size: 62.5%;
+}
+/* Remove default margin and padding */
+body, h1, h2, h3, h4, h5, h6, p, blockquote, pre, dl, dd, ol, ul, figure, hr {
+    margin: 0;
+    padding: 0;
+}
+
+/* Set core body defaults */
+body {
+    line-height: 1;
+}
+
+/* Remove list styles on ul, ol elements with a list role, which suggests default styling will be removed */
+ul[role='list'], ol[role='list'] {
+    list-style: none;
+}
+
+/* Set default typography */
+body {
+    font-size: 1.6rem;
+    font-family: Poppins, sans-serif;
+}
+
+/* Headings and paragraphs */
+h1, h2, h3, h4, h5, h6 {
+    font-size: inherit;
+    font-weight: inherit;
+}
+
+/* Remove the border on images inside links in IE 10. */
+img {
+    border-style: none;
+}
+
+/* Reset form elements */
+button, input, optgroup, select, textarea {
+    margin: 0;
+    font: inherit;
+    color: inherit;
+}
+
+/* 1. Add the correct text decoration in Chrome, Edge, IE, Opera, and Safari.
+   2. Remove the gray background on active links in IE 10. */
+a {
+    text-decoration: none;
+    background-color: transparent;
+}
+
+/* Reset fonts for relevant elements */
+button, input, select, textarea {
+    font-family: inherit;
+}
+
+/* Remove the padding so developers are not caught out when they zero out ul elements */
+button, input, select, textarea {
+    margin: 0;
+}
+
+/* Fix additional inheritance and box model problems */
+button, input, select, textarea {
+    overflow: visible;
+}
+
+/* Remove the inheritance of text transform in Edge, Firefox, and IE. */
+button, select {
+    text-transform: none;
+}
+
+/* Correct the inability to style clickable types in iOS and Safari */
+button, [type='button'], [type='reset'], [type='submit'] {
+    cursor: pointer;
+    -webkit-appearance: button;
+}
+
+/* Remove the inner border and padding in Firefox. */
+button::-moz-focus-inner, [type='button']::-moz-focus-inner, [type='reset']::-moz-focus-inner, [type='submit']::-moz-focus-inner {
+    border-style: none;
+    padding: 0;
+}
+
+/* Restore the focus styles unset by the previous rule. */
+button:-moz-focusring, [type='button']:-moz-focusring, [type='reset']:-moz-focusring, [type='submit']:-moz-focusring {
+    outline: 1px dotted ButtonText;
+}
+
+/* Correct the padding in Firefox. */
+fieldset {
+    padding: 0.35em 0.75em 0.625em;
+}
+
+/* Remove the padding so developers are not caught out when they zero out fieldset elements in all browsers. */
+legend {
+    padding: 0;
+}
+
+/* Add the correct vertical alignment in Chrome, Firefox, and Opera. */
+progress {
+    vertical-align: baseline;
+}
+
+/* Remove the default vertical scrollbar in IE. */
+textarea {
+    overflow: auto;
+}
+
+/* 1. Correct the inheritance and scaling of font size in all browsers.
+   2. Correct the odd 'em' font sizing in all browsers. */
+h1, h2, h3, h4, h5, h6 {
+    font-size: inherit;
+    font-weight: inherit;
+}
+
+/* Address Firefox 4+ setting 'line-height' on 'input' using '!important' in the UA stylesheet */
+button, input {
+    line-height: normal;
+}
+
+/* Reset 'overflow' style in IE 10 and below */
+button, input {
+    overflow: visible;
+}
+
+/* Replace pointer cursor in disabled elements */
+[disabled] {
+    cursor: default;
+}
+
+/* Address Firefox 4+ setting 'line-height' on 'input' using '!important' in the UA stylesheet */
+button, input {
+    line-height: normal;
+}
+
+/* Correct the odd appearance in Chrome and Safari */
+button, input, optgroup, select, textarea {
+    margin: 0;
+    font: inherit;
+    color: inherit;
+}
+
+/* Reset to invisible */
+button, input {
+    margin: 0;
+}
+
+/* Reset 'appearance' and 'box-sizing' */
+button::-moz-focus-inner, input::-moz-focus-inner {
+    border: 0;
+    padding: 0;
+}
+
+/* Address Firefox 4+ setting 'line-height' on 'input' using '!important' in the UA stylesheet */
+button, input, select, textarea {
+    line-height: normal;
+}
+
+/* It's recommended that you reset this in an ancestor selector */
+button, input, select, textarea {
+    -webkit-appearance: none;
+}
+
+/* Reset size properties */
+button, select {
+    /* Reset Chrome and Safari on macOS */
+    -webkit-appearance: none;
+    /* Reset Edge */
+    appearance: none;
+}
+
+/* Remove the padding in IE 10 */
+[hidden] {
+    display: none;
+}

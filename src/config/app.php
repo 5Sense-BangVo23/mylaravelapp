@@ -5,6 +5,7 @@ use Illuminate\Support\ServiceProvider;
 
 return [
 
+    'app.site_name' => 'My App',
     /*
     |--------------------------------------------------------------------------
     | Application Name
@@ -184,5 +185,8 @@ return [
     'aliases' => Facade::defaultAliases()->merge([
         // 'Example' => App\Facades\Example::class,
     ])->toArray(),
+
+
+    'asset_function' => 'asset',
 
 ];
