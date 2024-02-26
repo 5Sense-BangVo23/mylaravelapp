@@ -1,3 +1,14 @@
+$(document).ready(function() {
+    var header = $("#stickyHeader");
+
+    $(window).scroll(function() {
+        if (window.pageYOffset > 0) {
+            header.addClass("sticky");
+        } else {
+            header.removeClass("sticky");
+        }
+    });
+});
 $(document).ready(function () {
     // Function to handle menu item click
     function handleMenuItemClick() {
@@ -20,7 +31,36 @@ $(document).ready(function () {
 });
 
 
+// --------- Clock ------------
+$(document).ready(function() {
+    function updateClock() {
+        var now = new Date();
+        var hours = now.getHours();
+        var minutes = now.getMinutes();
+        var seconds = now.getSeconds();
+        var day = now.getDate();
+        var month = now.getMonth() + 1; // Months are 0-based
+        var year = now.getFullYear();
 
+        // Ensure two digits for hours, minutes, and seconds
+        hours = hours < 10 ? '0' + hours : hours;
+        minutes = minutes < 10 ? '0' + minutes : minutes;
+        seconds = seconds < 10 ? '0' + seconds : seconds;
+        day = day < 10 ? '0' + day : day;
+        month = month < 10 ? '0' + month : month;
+
+        var currentDate = year + '-' + month + '-' + day;
+        var currentTime = hours + ':' + minutes ;//+ ':' + seconds
+
+        $('#clock').html('<div id="date">' + currentDate + '</div><div id="time">' + currentTime + '</div>');
+
+        // Update every second
+        setTimeout(updateClock, 1000);
+    }
+
+    // Initial call to display the clock
+    updateClock();
+});
 // ------------ Banner Slides----------
 
 $(document).ready(function () {

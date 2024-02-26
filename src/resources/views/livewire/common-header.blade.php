@@ -1,4 +1,4 @@
-<header class="header">
+<header class="header" id="stickyHeader">
     <div class="left logo">
         <svg width="69" height="42" viewBox="0 0 69 42" fill="none" xmlns="http://www.w3.org/2000/svg">
             <g clip-path="url(#clip0_1_163)">

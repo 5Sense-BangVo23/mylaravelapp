@@ -26,6 +26,7 @@
         <section class="banner-section">
             <div class="banner-container">
                 <div class="banner-left">
+                    <div id="clock"></div>
                     <h1 class="banner-title">PROJECT</h1>
                     <h2 class="banner-text">Lorum</h2>
                     <div class="banner-btn">
@@ -48,7 +49,9 @@
                             <div class="banner-slide">
                                 <img src="{{ config('app.asset_function')('images/banner.svg') }}" alt="Slide 4">
                             </div>
-                       
+                    </div>
+                    <div class="banner-link">
+                        <a href="#"> <button class="btn-banner-link">View Project <i class="fa fa-long-arrow-right" aria-hidden="true"></i></button></a>
                     </div>
                 </div>
             </div>  

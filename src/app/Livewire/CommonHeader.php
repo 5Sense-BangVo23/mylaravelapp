@@ -3,8 +3,6 @@
 namespace App\Livewire;
 
 use Livewire\Component;
-use App\Models\CmnContent;
-use App\Traits\PublishStatusTrait;
 use Illuminate\View\ComponentSlot;
 
 class CommonHeader extends Component

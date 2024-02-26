@@ -22,6 +22,10 @@
 
    
   
-
+  @livewire('common-footer',  [
+      'layout'=>'app',
+      'title'=>$title ?? null,
+    ]
+  )
     @livewireScripts
 </html>

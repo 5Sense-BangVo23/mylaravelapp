@@ -1,14 +1,39 @@
 #master-root{
-    position: relative;
     max-width: 100vw;
     margin: 0 auto;
     display: block;
-    z-index: 999999;
+}
+
+
+header {
+    position: sticky;
+    top: 0;
+    max-width: calc(100% - 4rem);
+    min-width: 320px;
+    background-color: #fff;
+    color: #333; /* Adjust text color to your preference */
+    padding: 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    flex-direction: row;
+    transition: top 0.3s; /* Smooth transition for the header */
+}
+
+header.sticky {
+    position: sticky;
+    max-width: 100%;
+    height: 76px; /* Adjust the desired height when sticky */
+    padding: 1rem; /* Adjust padding as needed */
+    z-index: 9999;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Add a shadow to the header */
+   
 }
 
 
 /* Header Component Styles */
-.header {
+/* .header {
     position: relative;
     max-width: calc(100% - 4rem); 
     min-width: 320px;
@@ -22,7 +47,7 @@
     flex-direction: row;
 
 
-}
+} */
 
 .left{
     width: 30%;
@@ -32,6 +57,22 @@
     width: 70%;
 }
 
+#clock {
+    margin-bottom: 10rem;
+    font-size: 2rem;
+    text-align: center;
+    color: #333;
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+#date {
+    font-size: 1.6rem;
+    margin-bottom: 10px;
+    color: #777;
+}
 
 .logo {
     position: relative;
@@ -206,8 +247,10 @@
     height: auto;
 } */
 .banner-section{
+    position: relative;
     margin-left: 11px;
    max-width: 97vw;
+   z-index: 1;
 }
 .banner-container {
     display: flex;
@@ -277,6 +320,31 @@
     z-index: 2;
 }
 
+.banner-link{
+    position: absolute;
+    left: 11.4%;
+    bottom: 25px;
+    transform: translate(0, 50%);
+    width: 200px;
+    height: 50px;
+    background: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+   
+    
+}
+
+.btn-banner-link{
+    width: 200px;
+    height: 50px;
+    background: #fff;
+    border-top: #fff ;
+    border-right: #fff ;
+    border-bottom: #fff;
+    border-left: #fff;
+}
+
 .banner-title{
     font-weight: 900;
     font-size: 35px;
@@ -308,9 +376,23 @@
     object-fit: cover;
 }
 
-
 /* ------------  Banner Slides -------------- */
 
+/* ---------------- Footer ----------------- */
+footer {
+    position: relative;
+    background-color: #333;
+    color: white;
+    padding: 20px;
+    text-align: center;
+    bottom: 0;
+    width: 100%;
+    
+}
+
+footer div {
+    font-size: 1.8rem;
+}
 
 /* Responsive Styles */
 
