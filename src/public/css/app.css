@@ -322,7 +322,7 @@ header.sticky {
 
 .banner-link{
     position: absolute;
-    left: 11.4%;
+    left: 0;
     bottom: 25px;
     transform: translate(0, 50%);
     width: 200px;
@@ -343,8 +343,13 @@ header.sticky {
     border-right: #fff ;
     border-bottom: #fff;
     border-left: #fff;
+    color: #333333;
+    text-transform: uppercase;
 }
-
+.btn-banner-link:hover{
+    background-color: #fbf8f8;
+    border: .5px outset #fbf8f8;
+}
 .banner-title{
     font-weight: 900;
     font-size: 35px;
@@ -359,7 +364,7 @@ header.sticky {
 .banner-slides {
     display: flex;
     /* Adjust the width to accommodate all slides horizontally */
-    max-width: 100rem ;
+    min-width: 100rem ;
     transition: transform 0.5s ease-in-out;
 }
 
@@ -519,5 +524,9 @@ footer div {
 
     .content {
         padding: 2.5rem;
+    }
+
+    .banner-slide{
+        min-width: 100%;
     }
 }

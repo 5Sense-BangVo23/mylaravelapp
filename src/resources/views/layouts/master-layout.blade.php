@@ -18,10 +18,6 @@
       
     {{ $slot }}
 
-
-
-   
-  
   @livewire('common-footer',  [
       'layout'=>'app',
       'title'=>$title ?? null,
