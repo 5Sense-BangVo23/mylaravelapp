@@ -82,10 +82,55 @@
         
         <section class="content-statement">
             <h1 class="title statement-title">Main Focus/Mission Statement</h1>
+            <div class="content-statement-container">
+                <div class="content-statement-left">
+                    <div class="content-statement-number">
+                        <span class="number-item">1</span>
+                    </div>
+                    <div class="content-statement-text">
+                        <p>But I must explain to you how all this mistaken idea of denouncing pleasure and praising pain was born and I will give you a complete account of the system, and expound the actual teachings of the great explorer of the truth, the master-builder of human happiness. No one rejects, dislikes, or avoids pleasure itself, because it is pleasure, but because those who do not know how to pursue pleasure rationally encounter consequences that are extremely painful. </p>
+                    </div>
+                </div>
+                <div class="content-statement-right">
+                    <div class="content-statement-number">
+                        <span class="number-item">2</span>
+                    </div>
+                    <div class="content-statement-text">
+                        <p>But I must explain to you how all this mistaken idea of denouncing pleasure and praising pain was born and I will give you a complete account of the system, and expound the actual teachings of the great explorer of the truth, the master-builder of human happiness. No one rejects, dislikes, or avoids pleasure itself, because it is pleasure, but because those who do not know how to pursue pleasure rationally encounter consequences that are extremely painful. </p>
+                    </div>
+                </div>
+            </div>
         </section>
+       
         <section class="content-outProject">
             
         </section>
+            <h1 class="title our-project-title">Our Projects</h1>
+            <article>
+                <div class="project-container">
+                    <div class="project-card">
+                        <img src="{{ config('app.asset_function')('images/project1.svg') }}" alt="Project 1">
+                        <h2 class="project-title">Project 1</h2>
+                        <a class="view-more" href="">View more <i class="fa fa-long-arrow-right" aria-hidden="true"></i></a>
+                    </div>
+                    <div class="project-card">
+                        <img src="{{ config('app.asset_function')('images/project2.svg') }}" alt="Project 2">
+                        <h2 class="project-title">Project 2</h2>
+                    </div>
+                    <div class="project-card">
+                        <img src="{{ config('app.asset_function')('images/project3.svg') }}" alt="Project 3">
+                        <h2 class="project-title">Project 3</h2>
+                    </div>
+                    <div class="project-card">
+                        <img src="{{ config('app.asset_function')('images/project4.svg') }}" alt="Project 2">
+                        <h2 class="project-title">Project 4</h2>
+                    </div>
+                    <div class="project-card">
+                        <img src="{{ config('app.asset_function')('images/project5.svg') }}" alt="Project 3">
+                        <h2 class="project-title">Project 5</h2>
+                    </div>
+                </div>
+            </article>
         <section class="content-contactUs">
             
         </section>

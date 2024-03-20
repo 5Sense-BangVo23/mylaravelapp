@@ -633,6 +633,126 @@ footer div {
 
 /* -------------- Statement -------------- */
 
+.content-statement {
+    display: flex;
+    flex-direction: column;
+    height: 45rem;
+}
+
+.content-statement-container {
+    display: flex;
+    height: 31rem;
+    width: 90%;
+    justify-content: center;
+    margin: auto;
+    align-content: center;
+}
+
 .statement-title{
     text-align: center;
 }
+
+.content-statement-left,
+.content-statement-right {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    padding: 10px; /* Thêm padding cho cả hai cột */
+}
+
+.content-statement-number,
+.content-statement-text {
+    margin-bottom: 10px; /* Khoảng cách giữa các phần tử con */
+}
+
+.content-statement-number {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+    height: 100%; /* Chiều cao cố định của số */
+    width: 50%;
+}
+
+.content-statement-text {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+    background-color: #ffffff; /* Màu nền của văn bản */
+    flex: 1; /* Văn bản chiếm phần còn lại của cột */
+    width: 50%;
+}
+
+.number-item{
+    font-size: 20rem;
+    font-weight: 900;
+    color:  #F2F2F2;
+}
+
+.content-statement-text p{
+    text-indent: 20px; 
+    font-size: 16px; /* Điều chỉnh kích thước của văn bản */
+    line-height: 1.6; /* Điều chỉnh dãn dòng */
+    letter-spacing: 0.5px; /* Điều chỉnh khoảng cách giữa các chữ cái */
+    text-align: justify;
+}
+
+/* --------------- OUR PROJECT --------------- */
+.our-project-title{
+    text-align: center;
+}
+
+/* --------- back to top ------- */
+
+#backToTopBtn {
+    display: none;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: #2665d64d;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+    outline: none;
+    overflow: hidden;
+    z-index: 9999;
+}
+
+#backToTopBtn.show {
+    display: block;
+}
+
+#backToTopBtn:hover {
+    background-color: #0056b3;
+}
+
+#backToTopBtn i {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 24px;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.5);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+#backToTopBtn.show {
+    animation: fadeIn 0.5s forwards;
+}
+
+
+

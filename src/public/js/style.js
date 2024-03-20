@@ -91,3 +91,33 @@ $(document).ready(function () {
         changeSlide(1);
     });
 });
+
+// ---------- Back To Top ---------
+
+$(document).ready(function() {
+    updateBackToTopVisibility();
+
+    $(window).scroll(function() {
+        updateBackToTopVisibility();
+    });
+
+    $(document).on('click', '#backToTopBtn', function() {
+        $('html, body').animate({scrollTop: 0}, 'smooth');
+    });
+});
+
+function updateBackToTopVisibility() {
+    let bottomThreshold = 500; 
+    let isBottomReached = ($(window).scrollTop() + $(window).height()) > ($(document).height() - bottomThreshold);
+    
+    if (isBottomReached) {
+        $('#backToTopBtn').addClass('show');
+    } else {
+        $('#backToTopBtn').removeClass('show');
+    }
+}
+
+
+
+
+
