@@ -31,7 +31,10 @@ header.sticky {
    
 }
 
-
+article{
+    position: relative;
+    z-index: 1;
+}
 /* Header Component Styles */
 /* .header {
     position: relative;
@@ -753,6 +756,49 @@ footer div {
 #backToTopBtn.show {
     animation: fadeIn 0.5s forwards;
 }
+
+
+/* ----------------  */
+
+.project-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: auto;
+}
+
+.project-card {
+    margin: auto 15px;
+}
+
+.project-card:nth-child(3n) {
+    margin: auto 15px;
+}
+
+.project-title{
+    position: relative;
+    top: -180px;
+    left: 60%;
+    transform: translate(-50%, -50%);
+}
+
+.view-more{
+    position: relative;
+    top: -92px;
+    left: 10%;
+    transform: translate(-50%, -50%);
+    background-color: #4627273f;
+    color: #cccccc;
+    padding: 2rem 5rem;
+    text-transform: uppercase;
+    overflow: hidden;
+    transition: background-position 0.5s ease;
+    background-image: linear-gradient(to right, #fff, #f0f0f0, #fff);
+    background-size: 200% 100%;
+}
+
+
+
 
 
 
