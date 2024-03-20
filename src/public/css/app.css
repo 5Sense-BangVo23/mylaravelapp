@@ -49,6 +49,13 @@ header.sticky {
 
 } */
 
+.title{
+    font-weight: 900;
+    font-size: 35px;
+    color: #BDBDBD;
+    text-transform: uppercase;
+}
+
 .left{
     width: 30%;
 }
@@ -350,6 +357,28 @@ header.sticky {
     background-color: #fbf8f8;
     border: .5px outset #fbf8f8;
 }
+
+.number-grid {
+    display: flex;
+    align-items: center;
+}
+
+.number {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    padding: 10px;
+    border-radius: 5px; 
+    background-color: #f0f0f0; 
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
+    transition: transform 0.3s ease; 
+}
+
+.separator {
+    margin: 0 10px;
+    color: #777; 
+}
+
 .banner-title{
     font-weight: 900;
     font-size: 35px;
@@ -529,4 +558,81 @@ footer div {
     .banner-slide{
         min-width: 100%;
     }
+}
+
+
+
+/* ------------ Section About  -------------- */
+
+.content-about {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin: 5rem 14rem;
+    width: 127rem;
+    background: #FBFBFB; 
+    padding: 15px 20px;
+}
+
+.column {
+    flex: 1;
+}
+
+.image-contentAbout {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 45rem;
+}
+
+.image-contentAbout .column {
+    flex: 1; /* Mỗi cột sẽ co giãn để lấp đầy không gian của image-contentAbout */
+    margin-left: 20px;
+}
+.image-contentAbout .column:nth-child(2){
+    flex: 1; 
+    padding-right: 20px; /* Tạo khoảng cách giữa 2 cột */
+}
+.image-contentAbout img {
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+.paragraph-contentAbout {
+    padding-left: 20px; /* Tạo khoảng cách giữa cột hình ảnh và cột văn bản */
+    text-align: justify;
+}
+
+.text-contentAbout {
+    margin-top: 2rem;
+    margin-bottom: 4rem ;
+    text-indent: 20px; 
+    font-size: 16px; /* Điều chỉnh kích thước của văn bản */
+    line-height: 1.6; /* Điều chỉnh dãn dòng */
+    letter-spacing: 0.5px; /* Điều chỉnh khoảng cách giữa các chữ cái */
+}
+
+
+.read-more {
+    position: relative;
+    background-color: #fff;
+    color: #333333;
+    padding: 2rem 5rem;
+    text-transform: uppercase;
+    overflow: hidden;
+    transition: background-position 0.5s ease;
+    background-image: linear-gradient(to right, #fff, #f0f0f0, #fff);
+    background-size: 200% 100%;
+}
+
+.read-more:hover {
+    background-position: right center;
+}
+
+
+/* -------------- Statement -------------- */
+
+.statement-title{
+    text-align: center;
 }
