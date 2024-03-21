@@ -23,7 +23,7 @@ WORKDIR /var/www/html
 COPY src/ /var/www/html
 
 # Install composer
-# RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 # RUN composer install --no-interaction
 
 # Set role for storage and bootstrap/cache
