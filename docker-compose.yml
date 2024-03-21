@@ -10,12 +10,12 @@ services:
     ports:
       - "8001:8000"
     volumes:
-      - ./src:/var/www/html
+      - ./data:/data
     networks:
       - app-network
 
   db:
-    image: mysql:5.7.44
+    image: mysql:8.0.33
     platform: linux/amd64
     container_name: mysql
     restart: unless-stopped
@@ -28,7 +28,7 @@ services:
       MYSQL_USER: mylaraveluser
       MYSQL_PASSWORD: takemyhand
     volumes:
-      - ./src:/var/lib/mysql
+      - ./data/mysql:/var/lib/mysql
     networks:
       - app-network
 
