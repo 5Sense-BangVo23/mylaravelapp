@@ -28,7 +28,7 @@ services:
       MYSQL_USER: mylaraveluser
       MYSQL_PASSWORD: takemyhand
     volumes:
-      - ./mysql-data:/var/lib/mysql
+      - ./src:/var/lib/mysql
     networks:
       - app-network
 

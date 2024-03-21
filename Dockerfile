@@ -1,11 +1,11 @@
-# Sử dụng ảnh chính thức PHP 8.2 FPM làm ảnh cơ sở
+
 FROM php:8.2-fpm
 
-# Thiết lập biến môi trường
+
 ENV COMPOSER_ALLOW_SUPERUSER=1
 ENV APP_HOME /var/www/html
 
-# Cài đặt các phụ thuộc hệ thống
+
 RUN apt-get update && apt-get install -y \
     git \
     curl \
