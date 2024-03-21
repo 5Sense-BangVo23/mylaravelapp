@@ -16,6 +16,7 @@ services:
 
   db:
     image: mysql:5.7.44
+    platform: linux/amd64
     container_name: mysql
     restart: unless-stopped
     tty: true
