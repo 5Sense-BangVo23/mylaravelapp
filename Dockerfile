@@ -1,7 +1,11 @@
-# Content: Dockerfile for PHP 8.2
+# Sử dụng ảnh chính thức PHP 8.2 FPM làm ảnh cơ sở
 FROM php:8.2-fpm
 
-# Install package
+# Thiết lập biến môi trường
+ENV COMPOSER_ALLOW_SUPERUSER=1
+ENV APP_HOME /var/www/html
+
+# Cài đặt các phụ thuộc hệ thống
 RUN apt-get update && apt-get install -y \
     git \
     curl \
@@ -9,33 +13,22 @@ RUN apt-get update && apt-get install -y \
     libonig-dev \
     libxml2-dev \
     zip \
-    unzip
+    unzip \
+    && rm -rf /var/lib/apt/lists/*
 
-# Install PHP extension
 RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
 
 
-# Set working directory
-WORKDIR /var/www/html
+WORKDIR $APP_HOME
 
 
-# Copy source code
-COPY src/ /var/www/html
+COPY . $APP_HOME/
 
-# Install composer
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-# RUN composer install --no-interaction
-
-# Set role for storage and bootstrap/cache
 RUN mkdir -p storage bootstrap/cache \
     && chown -R www-data:www-data storage bootstrap/cache \
     && chmod -R 775 storage bootstrap/cache
-# Set quyền cho storage và bootstrap/cache
-RUN chown -R www-data:www-data storage bootstrap/cache
-RUN chmod -R 775 storage bootstrap/cache
 
-# Expose port 9000 để kết nối với nginx hoặc apache
 EXPOSE 8000
 
-# CMD ["php-fpm"]
-CMD php artisan serve --host=0.0.0.0
+
+CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]
