@@ -10,7 +10,7 @@ services:
     ports:
       - "8001:8000"
     volumes:
-      - ./data:/data
+      - ./src:/var/www/html
     networks:
       - app-network
 
