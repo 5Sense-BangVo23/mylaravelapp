@@ -1,6 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\CloudinaryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +16,23 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+// Route for login
+Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
+Route::post('login', [LoginController::class, 'login']);
+
+// Route for logout
+Route::post('logout', [LoginController::class,'logout'])->name('logout');
+Route::get('logout', [LoginController::class,'logout'])->name('logout');
+
+// Route for registration
+Route::get('register', [RegisterController::class, 'showRegistrationForm'])->name('register');
+Route::post('register', [RegisterController::class, 'register']);
+
+
+
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/media/cloudinary', [CloudinaryController::class, 'showUploadForm']);
+Route::post('/media/cloudinary', [CloudinaryController::class, 'upload'])->name('upload');
