@@ -73,7 +73,19 @@ class CloudinaryController extends Controller
     }
 
     
-    
+    public function remove($id)
+    {
+        $media = Media::findOrFail($id);
+        $publicId = pathinfo($media->file_url, PATHINFO_FILENAME);
+        $deleted = Cloudinary::destroy($publicId);
+
+        if ($deleted) {
+            $media->delete();
+            return redirect()->back()->with('success', 'File deleted successfully!');
+        } else {
+            return redirect()->back()->with('error', 'Failed to delete file from Cloudinary!');
+        }
+    }
     
     
 

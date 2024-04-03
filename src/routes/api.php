@@ -20,3 +20,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::get('/media/cloudinary/data', [CloudinaryController::class, 'getData'])->name('getData');
+Route::get('/media/cloudinary/{id}', [CloudinaryController::class, 'view'])->name('view');
+Route::delete('/media/cloudinary/{id}', [CloudinaryController::class, 'remove'])->name('remove');

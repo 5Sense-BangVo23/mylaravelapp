@@ -26,31 +26,32 @@
                 var closeModalSpan = document.querySelector('.close');
                 var fileUpload = document.getElementById('file-upload');
                 var hiddenSubmit = document.getElementById('hidden-submit');
-    
+
                 fileUpload.addEventListener('change', function() {
                     hiddenSubmit.click();
                 });
-    
+
                 openModalButton.addEventListener('click', function() {
                     modal.style.display = 'block';
                 });
-    
+
                 closeModalSpan.addEventListener('click', function() {
                     modal.style.display = 'none';
                 });
-    
-                window.addEventListener('click', function(event) {
-                    if (event.target == modal) {
+
+                modal.addEventListener('click', function(event) {
+                    if (event.target === modal && !modal.contains(event.target)) {
                         modal.style.display = 'none';
                     }
                 });
-    
+
                 fileUpload.addEventListener('change', function() {
                     var fileName = this.files[0].name;
                     var label = this.previousElementSibling;
                     label.querySelector('span').innerText = fileName;
                 });
             });
+
         </script>
     </x-slot>
     @auth('admin')
@@ -62,55 +63,63 @@
             </ul>
         </div>
     @endauth
-    <div>
-         <!-- Button to open modal -->
-        <button type="button" id="openModalButton">Open Upload Modal</button>
-
-        <!-- Modal container -->
-        <div class="modal-container" id="uploadModal">
-            <!-- Modal content -->
-            <div class="modal-content">
-                <!-- Close button -->
-                <span class="close">&times;</span>
-                <!-- Modal title -->
-                <h2>Upload File</h2>
-                <!-- Upload form -->
-                <form id="uploadForm" action="{{ route('upload') }}" method="POST" enctype="multipart/form-data">
-                    @csrf
-                    <!-- Custom file upload -->
-                    <label for="file-upload" class="custom-file-upload">
-                        <span>Choose File</span>
-                    </label>
-                    <input id="file-upload" type="file" name="file" accept="image/*" style="display: none;">
-                    <!-- Hidden submit button -->
-                    <button id="hidden-submit" type="submit" style="display: none;"></button>
-                </form>
+        <header>
+            <button type="button" id="openModalButton">Upload</button>
+        </header>
+        <main>
+            <div class="modal-container" id="uploadModal">
+            
+                <!-- Modal content -->
+                <div class="modal-content">
+                    <!-- Close button -->
+                    <span class="close">&times;</span>
+                    <!-- Modal title -->
+                    <h2>Upload File</h2>
+                    <!-- Upload form -->
+                    <form id="uploadForm" action="{{ route('upload') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <!-- Custom file upload -->
+                        <label for="file-upload" class="custom-file-upload">
+                            <span>Choose File</span>
+                        </label>
+                        <input id="file-upload" type="file" name="file" accept="image/*" style="display: none;">
+                        <!-- Hidden submit button -->
+                        <button id="hidden-submit" type="submit" style="display: none;"></button>
+                    </form>
+                </div>
             </div>
-        </div>
+            <div id="tableWrapper">
+                <table id="dataTable">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Medially Type</th>
+                            <th>Medially ID</th>
+                            <th>File URL</th>
+                            <th>File Name</th>
+                            <th>File Type</th>
+                            <th>Size</th>
+                            <th>Created At</th>
+                            <th>Updated At</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                       
+                    </tbody>
+                </table>    
+            </div>
 
-    </div>
-    
-    <table id="dataTable">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Medially Type</th>
-                <th>Medially ID</th>
-                <th>File URL</th>
-                <th>File Name</th>
-                <th>File Type</th>
-                <th>Size</th>
-                <th>Created At</th>
-                <th>Updated At</th>
-            </tr>
-        </thead>
-        <tbody>
-           
-        </tbody>
-    </table>
-
+            <div id="myCustomModal" class="custom-modal">
+                <div class="modal-content">
+                    <span class="close-button">&times;</span>
+                    <div id="custom-image-container"></div>
+                </div>
+            </div>
+            
+        </main>
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+       document.addEventListener('DOMContentLoaded', function () {
             var tableBody = document.querySelector('#dataTable tbody');
             var xhr = new XMLHttpRequest();
             xhr.open('GET', '{{ route("getData") }}', true);
@@ -124,24 +133,136 @@
                             <td>${row.id}</td>
                             <td>${row.medially_type}</td>
                             <td>${row.medially_id}</td>
-                            <td>${row.file_url}</td>
+                            <td><a onclick="openInNewTab('${row.file_url}')">${row.file_url}</a></td>
                             <td>${row.file_name}</td>
                             <td>${row.file_type}</td>
                             <td>${row.size}</td>
                             <td>${row.created_at}</td>
                             <td>${row.updated_at}</td>
-                        `;
+                            <td>
+                                <div class="button-container">
+                                    <button class="view" onclick="viewItem(${row.id})">View</button>
+                                    <button class="delete" onclick="deleteItem(${row.id})">Delete</button>
+                                </div>
+                            </td>
+                         `;
                         tableBody.appendChild(tr);
                     });
                 } else {
-                    console.error(xhr.statusText);
+                    // console.error(xhr.statusText);
                 }
             };
             xhr.onerror = function () {
-                console.error(xhr.statusText);
+                // console.error(xhr.statusText);
             };
             xhr.send();
         });
-    </script>
+
+        function viewItem(id) {
+            console.log('View item with ID:', id);
+            fetch('{{ route("view", ":id") }}'.replace(':id', id))
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch image');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    const imageUrl = data.imageUrl;
+                    console.log('Image URL:', imageUrl);
+                    const imageElement = document.createElement('img');
+                    imageElement.src = imageUrl;
+                
+                    const modal = document.getElementById('myCustomModal');
+                    const imageContainer = document.getElementById('custom-image-container');
+                    imageContainer.innerHTML = ''; 
+                    imageContainer.appendChild(imageElement);
+                    
+                    modal.style.display = 'block';
+
+                    const closeButton = modal.querySelector('.close-button');
+                    closeButton.addEventListener('click', () => {
+                        modal.style.display = 'none';
+                    });
+                })
+                .catch(error => {
+                    // console.error(error);
+                });
+        }
+
+        function deleteItem(id) {
+            if (confirm('Are you sure you want to delete this item?')) {
+                fetch('{{ route("remove", ":id") }}'.replace(':id', id), {
+                    method: 'DELETE',
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    }
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to delete item');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    refreshDataTable(); 
+                })
+                .catch(error => {
+                    // console.error(error.message);
+                });
+            }
+        }
+
+
+        function refreshDataTable() {
+            var tableBody = document.querySelector('#dataTable tbody');
+            tableBody.innerHTML = ''; 
+
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', '{{ route("getData") }}', true);
+            xhr.onload = function () {
+                if (xhr.status >= 200 && xhr.status < 300) {
+                    var data = JSON.parse(xhr.responseText);
+
+                    data.forEach(function (row) {
+                        var tr = document.createElement('tr');
+                        tr.innerHTML = `
+                            <td>${row.id}</td>
+                            <td>${row.medially_type}</td>
+                            <td>${row.medially_id}</td>
+                            <td><a href="${row.file_url}">${row.file_url}</a></td>
+                            <td>${row.file_name}</td>
+                            <td>${row.file_type}</td>
+                            <td>${row.size}</td>
+                            <td>${row.created_at}</td>
+                            <td>${row.updated_at}</td>
+                            <td>
+                                <div class="button-container">
+                                    <button class="view" onclick="viewItem(${row.id})">View</button>
+                                    <button class="delete" onclick="deleteItem(${row.id})">Delete</button>
+                                </div>
+                            </td>
+                        `;
+                        tableBody.appendChild(tr); 
+                    });
+                } else {
+                    // console.error(xhr.statusText);
+                }
+            };
+            xhr.onerror = function () {
+                // console.error(xhr.statusText);
+            };
+            xhr.send();
+        }
+
+        function openInNewTab(url) {
+            var win = window.open(url, '_blank');
+            win.focus();
+        }
+
+
+  
+  
+  </script>
  
 </x-guest-layout>

@@ -1,137 +1,218 @@
-      /* Modal container */
-      .modal-container {
-        display: none;
-        position: fixed;
-        z-index: 1;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        overflow: auto;
-        background-color: rgba(0, 0, 0, 0.4);
-    }
-    
-    /* Modal content */
-    .modal-content {
-        background-color: #ffffff;
-        margin: 10% auto;
-        padding: 20px;
-        border: 1px solid #ccc;
-        width: 80%;
-        max-width: 500px;
-        border-radius: 8px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        animation-name: modalopen;
-        animation-duration: 0.5s;
-    }
-    
-    /* Close button */
-    .close {
-        color: #777777;
-        float: right;
-        font-size: 24px;
-        font-weight: bold;
-    }
-    
-    .close:hover,
-    .close:focus {
-        color: #333333;
-        text-decoration: none;
-        cursor: pointer;
-    }
-    
-    /* Custom file upload */
-    .custom-file-upload {
-        border: 2px solid #cccccc;
-        display: inline-block;
-        padding: 10px 20px;
-        cursor: pointer;
-        background-color: #f9f9f9;
-        color: #333333;
-        border-radius: 5px;
-        margin-top: 20px;
-        transition: background-color 0.3s ease;
-    }
-    
-    .custom-file-upload:hover {
-        background-color: #eeeeee;
-    }
-    
-    /* Animation */
-    @keyframes modalopen {
-        from {
-            opacity: 0;
-            transform: translateY(-50px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-    
-    /* Button to open modal */
-    #openModalButton {
-        position: relative;
-        background-color: #4CAF50;
-        color: white;
-        padding: 15px 20px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-    }
-    
-    #openModalButton:hover {
-        background-color: #45a049;
-    }
-    
-    /* Hiệu ứng before và after */
-    #openModalButton::before,
-    #openModalButton::after {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        border-radius: 5px;
-    }
-    
-    #openModalButton::before {
-        background: rgba(255, 255, 255, 0.2);
-        z-index: -1;
-    }
-    
-    #openModalButton::after {
-        content: '';
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        z-index: 1;
-    }
+/* Modal container */
+.modal-container {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.6);
+}
 
-    /* -------------- Datatables ----------- */
-    #dataTable {
-        border-collapse: collapse;
-        width: 100%;
+/* Modal content */
+.modal-content {
+    background-color: #fff;
+    margin: 10% auto;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+    animation: modalopen 0.5s ease;
+    max-width: 80%; 
+}
+
+/* Close button */
+.close {
+    color: #aaa;
+    font-size: 24px;
+    font-weight: bold;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.close:hover {
+    color: #333;
+}
+
+/* Custom file upload */
+.custom-file-upload {
+    border: 2px solid #ccc;
+    display: inline-block;
+    padding: 15px 30px;
+    cursor: pointer;
+    background-color: #f8f8f8;
+    color: #333;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+}
+
+.custom-file-upload:hover {
+    background-color: #eee;
+}
+
+/* Button to open modal */
+#openModalButton {
+    background-color: #4CAF50;
+    color: white;
+    padding: 15px 30px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#openModalButton:hover {
+    background-color: #45a049;
+}
+
+/* DataTables */
+#tableWrapper {
+    max-width: 1200px; 
+    margin: 20px auto; 
+    overflow-x: auto;
+    max-height: 500px; 
+}
+
+#dataTable {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+#dataTable th, #dataTable td {
+    border: 1px solid #ddd;
+    padding: 12px;
+}
+
+#dataTable th {
+    position: sticky;
+    top: 0;
+    background-color: #d1cccc;
+    color: #333131;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+}
+
+#dataTable a {
+    color: #333131;
+    text-decoration: none; 
+    transition: color 0.3s ease; 
+    cursor: pointer;
+}
+
+#dataTable a:hover {
+    color: #7ea9d6; 
+}
+#dataTable tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+#dataTable tbody tr:hover {
+    background-color: #f0f0f0;
+}
+
+/* Animation */
+@keyframes modalopen {
+    from {
+        opacity: 0;
+        transform: translateY(-50px);
     }
-    
-    #dataTable th, #dataTable td {
-        border: 1px solid #dddddd;
-        text-align: left;
-        padding: 8px;
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
-    
-    #dataTable th {
-        background-color: #f2f2f2;
-        color: #333333;
+}
+
+/* ------------- Features --------- */
+.button-container button {
+    margin-top: 5px;
+    margin-right: 5px;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.button-container button:hover {
+    background-color: #ddd; 
+}
+
+.button-container button.view {
+    background-color: #4CAF50; 
+    color: white; 
+}
+
+.button-container button.delete {
+    background-color: #f44336; 
+    color: white; 
+}
+
+.button-container button.delete:hover,
+.button-container button.view:hover {
+    background-color: #bbb; 
+}
+
+
+/* -------------- Modal --------- */
+.custom-modal {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.6);
+}
+
+
+.modal-content {
+    background-color: #fff;
+    margin: 10% auto;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+    animation: modalopen 0.5s ease;
+    max-width: 80%; 
+}
+
+
+.close-button {
+    color: #aaa;
+    font-size: 24px;
+    font-weight: bold;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.close-button:hover {
+    color: #333;
+}
+
+#custom-image-container {
+    text-align: center;
+}
+#custom-image-container img {
+    width: 300px; 
+    height: auto;
+}
+
+@keyframes modalopen {
+    from {
+        opacity: 0;
+        transform: translateY(-50px);
     }
-    
-    #dataTable tbody tr:nth-child(even) {
-        background-color: #f9f9f9;
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
-    
-    #dataTable tbody tr:hover {
-        background-color: #e9e9e9;
-    }
-    
+}
+
+  
