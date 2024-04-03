@@ -1,9 +1,11 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Auth\RegisterController;
-use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\CloudinaryController;
+use App\Http\Controllers\Guest\Auth\LoginController as AuthLoginController;
+use App\Http\Controllers\Guest\Auth\RegisterController as AuthRegisterController;
+use App\Http\Controllers\Media\Auth\LoginController as AuthCloudinaryController;
+use App\Http\Middleware\AdminMiddleware;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,23 +18,36 @@ use App\Http\Controllers\CloudinaryController;
 |
 */
 
-// Route for login
-Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
-Route::post('login', [LoginController::class, 'login']);
+
+// Routes for admin authentication
+Route::prefix('admin')->group(function () {
+   
+    // Routes for cloudinary functionality (protected by admin authentication)
+    Route::middleware(['admin'])->group(function () {
+        // Route to show the upload form
+        Route::get('/media/cloudinary', [CloudinaryController::class, 'showUploadForm'])->name('showUploadForm');
+
+        // Route to handle the upload form submission
+        Route::post('/media/cloudinary', [CloudinaryController::class, 'upload'])->name('upload');
+    });
+});
+
+// Routes for guest authentication
+Route::middleware(['guest'])->group(function () {
+    // Route for login
+    Route::get('login', [AuthLoginController::class, 'showLoginForm'])->name('login');
+    Route::post('login', [AuthLoginController::class, 'login']);
+
+    // Route for registration
+    Route::get('register', [AuthRegisterController::class, 'showRegistrationForm'])->name('register');
+    Route::post('register', [AuthRegisterController::class, 'register']);
+});
 
 // Route for logout
-Route::post('logout', [LoginController::class,'logout'])->name('logout');
-Route::get('logout', [LoginController::class,'logout'])->name('logout');
+Route::post('logout', [AuthLoginController::class,'logout'])->name('logout');
+Route::get('logout', [AuthLoginController::class,'logout'])->name('logout');
 
-// Route for registration
-Route::get('register', [RegisterController::class, 'showRegistrationForm'])->name('register');
-Route::post('register', [RegisterController::class, 'register']);
-
-
-
+// Default route
 Route::get('/', function () {
     return view('welcome');
 });
-
-Route::get('/media/cloudinary', [CloudinaryController::class, 'showUploadForm']);
-Route::post('/media/cloudinary', [CloudinaryController::class, 'upload'])->name('upload');

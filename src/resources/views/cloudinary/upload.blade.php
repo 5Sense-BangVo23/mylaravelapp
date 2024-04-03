@@ -15,6 +15,7 @@
           <meta property="og:path" content="{{  $urlPath }}" />
           <meta property="og:image" content="{{ $image }}" />
           <meta name="csrf-token" content="{{ csrf_token() }}">
+          
     </x-slot>
     <x-slot name="head">
         <link rel="stylesheet" href="{{ config('app.asset_function')('css/upload.css') }}">
@@ -52,7 +53,15 @@
             });
         </script>
     </x-slot>
-  
+    @auth('admin')
+        <div>
+            <p>Logged in as:</p>
+            <ul>
+                <li>Name: {{ Auth::guard('admin')->user()->name }}</li>
+                <li>Username: {{ Auth::guard('admin')->user()->username }}</li>
+            </ul>
+        </div>
+    @endauth
     <div>
          <!-- Button to open modal -->
         <button type="button" id="openModalButton">Open Upload Modal</button>
@@ -80,5 +89,59 @@
         </div>
 
     </div>
+    
+    <table id="dataTable">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Medially Type</th>
+                <th>Medially ID</th>
+                <th>File URL</th>
+                <th>File Name</th>
+                <th>File Type</th>
+                <th>Size</th>
+                <th>Created At</th>
+                <th>Updated At</th>
+            </tr>
+        </thead>
+        <tbody>
+           
+        </tbody>
+    </table>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var tableBody = document.querySelector('#dataTable tbody');
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', '{{ route("getData") }}', true);
+            xhr.onload = function () {
+                if (xhr.status >= 200 && xhr.status < 300) {
+                    var data = JSON.parse(xhr.responseText);
+
+                    data.forEach(function (row) {
+                        var tr = document.createElement('tr');
+                        tr.innerHTML = `
+                            <td>${row.id}</td>
+                            <td>${row.medially_type}</td>
+                            <td>${row.medially_id}</td>
+                            <td>${row.file_url}</td>
+                            <td>${row.file_name}</td>
+                            <td>${row.file_type}</td>
+                            <td>${row.size}</td>
+                            <td>${row.created_at}</td>
+                            <td>${row.updated_at}</td>
+                        `;
+                        tableBody.appendChild(tr);
+                    });
+                } else {
+                    console.error(xhr.statusText);
+                }
+            };
+            xhr.onerror = function () {
+                console.error(xhr.statusText);
+            };
+            xhr.send();
+        });
+    </script>
  
 </x-guest-layout>

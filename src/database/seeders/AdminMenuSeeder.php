@@ -76,12 +76,18 @@ class AdminMenuSeeder extends Seeder
                 "id" => 8000000,
                 "parent_id" => 0,
                 "order" => 8000000,
-                "title" => "Example",
+                "title" => "Media",
                 "icon" => "fa-tasks",
                 "uri" => "",
             ),
-
-        
+            array(
+                "id" => 8000001,
+                "parent_id" => 8000000,
+                "order" => 8000001,
+                "title" => "Cloudinary",
+                "icon" => "fa-bars",
+                "uri" => "/media/cloudinary",
+            ),        
         ]);
     }
 }
