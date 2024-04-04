@@ -4,12 +4,16 @@ namespace App\Http\Controllers;
 
 use App\Models\Media;
 use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Request;
 
 class CloudinaryController extends Controller
 {
     public function showUploadForm()
     {
+        // $adminInfo = Cloudinary::admin();
+        // $searchInfo = Cloudinary::search();
+        // $uploadInfo = Cloudinary::uploadApi();
+
         return view('cloudinary.upload');
     }
 
@@ -71,22 +75,5 @@ class CloudinaryController extends Controller
             return redirect()->back()->with('error', 'Failed to upload file!');
         }
     }
-
-    
-    public function remove($id)
-    {
-        $media = Media::findOrFail($id);
-        $publicId = pathinfo($media->file_url, PATHINFO_FILENAME);
-        $deleted = Cloudinary::destroy($publicId);
-
-        if ($deleted) {
-            $media->delete();
-            return redirect()->back()->with('success', 'File deleted successfully!');
-        } else {
-            return redirect()->back()->with('error', 'Failed to delete file from Cloudinary!');
-        }
-    }
-    
-    
 
 }
