@@ -1,7 +1,6 @@
 <?php
 
-namespace App\Livewire;
-
+namespace App\Http\Controllers\Livewire;
 use Livewire\Component;
 use Illuminate\View\ComponentSlot;
 
