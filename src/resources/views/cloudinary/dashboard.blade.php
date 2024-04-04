@@ -79,6 +79,109 @@
                     background-color: #3e8e41; 
                 }
 
+                /* -----------------  Noti ------------ */
+                /* CSS cho phần thông báo */
+#notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+    opacity: 0; /* Bắt đầu ẩn */
+    transition: opacity 0.5s ease-in-out; /* Thêm hiệu ứng fade */
+}
+
+#notification.show {
+    opacity: 1; /* Hiển thị thông báo khi có class 'show' */
+}
+
+.alert {
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+.alert-success {
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+    color: #155724;
+}
+
+.alert-danger {
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+    color: #721c24;
+}
+
+.close {
+    background-color: transparent;
+    border: none;
+    padding: 0;
+    font-size: 24px;
+    color: #aaa;
+    transition: color 0.3s;
+    cursor: pointer;
+}
+
+.close:hover {
+    color: #333;
+}
+
+.close:focus {
+    outline: none;
+}
+
+
+
+
+/* CSS cho phần tiến trình */
+.progressNoti {
+    height: 5px;
+    background-color: #f0f0f0;
+    margin-top: 5px;
+    overflow: hidden; /* Ẩn phần tiến trình khi không hiển thị */
+    border-radius: 5px;
+}
+
+/* CSS cho phần tiến trình bên trong */
+#progressBarNotiInner {
+    height: 100%;
+    background-color: #4CAF50;
+    width: 0;
+    transition: width 0.5s ease-in-out; /* Thêm hiệu ứng mở rộng */
+}
+
+/* CSS cho phần thông báo */
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+
+#notification.show {
+    animation: slideInRight 0.5s forwards; /* Sử dụng keyframe animation để tạo hiệu ứng slide vào từ bên phải */
+}
+
+/* CSS cho phần tiến trình */
+@keyframes progressWidth {
+    from {
+        width: 0;
+    }
+    to {
+        width: 100%;
+    }
+}
+
+#progressBarNotiInner {
+    height: 100%;
+    background-color: #4CAF50;
+    width: 0;
+    animation: progressWidth 2s forwards; /* Sử dụng keyframe animation để tạo hiệu ứng mở rộng tiến trình */
+}
+
+
 
         </style>
         <link rel="stylesheet" href="{{ config('app.asset_function')('css/modal-upload.css') }}">
@@ -134,4 +237,50 @@
             </div>
         </div>
     </main>
+
+    @if(session('success') || session('error'))
+        <div id="notification" class="alert alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>              
+            @if(session('success'))
+                <div id="successMessage" class="alert alert-success">
+                    {{ session('success') }}
+                </div>
+            @endif
+
+            @if(session('error'))
+                <div id="errorMessage" class="alert alert-danger">
+                    {{ session('error') }}
+                </div>
+            @endif
+
+            <div id="progressBarNoti" class="progressNoti" style="display: none;">
+                <div id="progressBarNotiInner" class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+        </div>
+    @endif
+
+<script>
+    
+    $(document).ready(function() {
+        @if(session('success'))
+            $('#notification').addClass('show'); 
+            var width = 0;
+            var interval = setInterval(function() {
+                width += 10;
+                $('#progressBarNotiInner').css('width', width + '%').attr('aria-valuenow', width);
+                if (width >= 100) {
+                    clearInterval(interval);
+                    setTimeout(function() {
+                        $('#notification').removeClass('show'); 
+                    }, 500); 
+                }
+            }, 500);
+        @endif
+    });
+
+
+</script>
+
 </x-guest-layout>

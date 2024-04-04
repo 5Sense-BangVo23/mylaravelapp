@@ -27,12 +27,12 @@ class CloudinaryController extends Controller
             $uploadResult = \UploadOption::upload($request); 
 
             if ($uploadResult) {
-                return redirect()->back()->with(true, 'File uploaded successfully!');
+                return redirect()->back()->with('success', 'File uploaded successfully!');
             } else {
-                return redirect()->back()->with(false, 'Failed to upload file!');
+                return redirect()->back()->with('error', 'Failed to upload file!');
             }
         } else {
-            return redirect()->back()->with(false, 'No file uploaded!');
+            return redirect()->back()->with('error', 'No file uploaded!');
         }
     }
 
