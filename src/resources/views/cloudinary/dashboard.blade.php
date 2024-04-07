@@ -260,7 +260,7 @@
             </div>
         </div>
     @endif
-
+   
 <script>
     
     $(document).ready(function() {
@@ -282,5 +282,4 @@
 
 
 </script>
-
 </x-guest-layout>

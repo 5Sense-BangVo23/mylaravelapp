@@ -121,14 +121,21 @@
    }
 
    #openModalButton {
+        display: flex;
         padding: 10px 20px;
-        background-color: #9a9ea1; 
-        color: white; 
+        background-color: #9a9ea1;
+        color: white;
         border: none;
         border-radius: 5px;
         cursor: pointer;
         font-size: 16px;
-        transition: background-color 0.3s, transform 0.3s; 
+        transition: background-color 0.3s, transform 0.3s;
+        align-items: center;
+        justify-content: center;
+        align-content: center;
+        flex-wrap: nowrap;
+        flex-direction: row;
+        margin: 20px auto;
     }
 
     #openModalButton:hover {

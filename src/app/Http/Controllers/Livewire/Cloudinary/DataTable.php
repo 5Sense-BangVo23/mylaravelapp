@@ -3,7 +3,10 @@
 namespace App\Http\Controllers\Livewire\Cloudinary;
 
 use App\Http\Controllers\Api\CloudinaryController as ApiCloudinaryController;
+use App\Models\Media;
 use Livewire\Component;
+
+use function Laravel\Prompts\confirm;
 
 class DataTable extends Component
 {
