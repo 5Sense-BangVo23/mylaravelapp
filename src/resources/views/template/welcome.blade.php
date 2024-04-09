@@ -41,18 +41,11 @@
                 </div>
                 <div class="banner-right">
                     <div class="banner-slides">
+                        @foreach($banners as $banner)
                             <div class="banner-slide">
-                                <img src="{{ config('app.asset_function')('images/banner.svg') }}" alt="Slide 1">
+                                <img src="{{ $banner->link }}" alt="{{ $banner->title }}">
                             </div>
-                            <div class="banner-slide">
-                                <img src="{{ config('app.asset_function')('images/banner.svg') }}" alt="Slide 2">
-                            </div>
-                            <div class="banner-slide">
-                                <img src="{{ config('app.asset_function')('images/banner.svg') }}" alt="Slide 3">
-                            </div>
-                            <div class="banner-slide">
-                                <img src="{{ config('app.asset_function')('images/banner.svg') }}" alt="Slide 4">
-                            </div>
+                        @endforeach
                     </div>
                     <div class="banner-link">
                         <a href="#"> <button class="btn-banner-link">View Project <i class="fa fa-long-arrow-right" aria-hidden="true"></i></button></a>
@@ -64,11 +57,11 @@
         <section class="content-about">
             <div class="image-contentAbout">
                 <div class="column">
-                    <img src="{{ config('app.asset_function')('images/about1.svg') }}" alt="About">
-                    <img src="{{ config('app.asset_function')('images/about3.svg') }}" alt="About">
+                    <img src="{{ $medias[0]->file_url }}" alt="About">
+                    <img src="{{ $medias[1]->file_url }}" alt="About">
                 </div>
                 <div class="column">
-                    <img src="{{ config('app.asset_function')('images/about2.svg') }}" alt="About">
+                    <img src="{{ $medias[2]->file_url }}" alt="About">
                   
                 </div>
             </div>

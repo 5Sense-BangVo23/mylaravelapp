@@ -1,10 +1,13 @@
 <?php
 
+use App\Http\Controllers\ArticleDetailController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CloudinaryController;
+use App\Http\Controllers\ContentListController;
 use App\Http\Controllers\Guest\Auth\LoginController as AuthLoginController;
 use App\Http\Controllers\Guest\Auth\RegisterController as AuthRegisterController;
 use App\Http\Controllers\Media\Auth\LoginController as AuthCloudinaryController;
+use App\Http\Controllers\WelcomeController;
 use App\Http\Middleware\AdminMiddleware;
 
 /*
@@ -48,6 +51,15 @@ Route::post('logout', [AuthLoginController::class,'logout'])->name('logout');
 Route::get('logout', [AuthLoginController::class,'logout'])->name('logout');
 
 // Default route
-Route::get('/', function () {
-    return view('welcome');
+Route::get('/', WelcomeController::class)->name('welcome');
+
+
+Route::group([
+    'prefix'        => '/article/detail',
+    'as'            => 'article.',
+], function () {
+    Route::get('/{id}', ArticleDetailController::class)->where('id', '[0-9]+')->name('detail');
 });
+
+Route::get('/{content_slug}/{page?}', ContentListController::class)->where('page', '[0-9]+')->name('content.list');
+Route::post('/{content_slug}/{page?}', ContentListController::class)->where('page', '[0-9]+')->name('content.list');

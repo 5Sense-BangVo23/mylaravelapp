@@ -4,6 +4,9 @@ use Illuminate\Support\Facades\Facade;
 use Illuminate\Support\ServiceProvider;
 
 return [
+    'banners' => 'images/banners',
+
+    'content_per_page' => 10,
 
     'app.site_name' => 'My App',
     /*
@@ -190,6 +193,9 @@ return [
         'Cloudinary' => CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary::class,
 
         'UploadOption' => App\Facades\UploadFacade::class,
+        'Content' => App\Facades\ContentFacade::class,
+        'ContentClass' => App\Facades\ContentClassFacade::class,
+        'PostClass' => App\Facades\PostClassFacade::class,
     ])->toArray(),
 
 

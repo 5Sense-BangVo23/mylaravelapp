@@ -217,6 +217,35 @@
     color: #046ca4; 
     font-size: 18px;
 }
+/* ---------- Spinner --------------- */
+
+.spinner-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.spinner {
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-left-color: #333; 
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite; 
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+
 </style>
 <div id="tableWrapper" style="position: relative;">
     <table id="dataTable">
@@ -291,23 +320,26 @@
 
     
 </div>
+<div class="spinner-overlay" style="display: none;">
+    <div class="spinner"></div>
+</div>
 
 <script>
- 
- document.addEventListener("DOMContentLoaded", function() {
-    var deleteButtons = document.querySelectorAll('.delete');
-    var popup;
-    var overlay;
-    var isPopupVisible = false;
 
-    deleteButtons.forEach(function(button) {
+document.addEventListener("DOMContentLoaded", () => {
+    const deleteButtons = document.querySelectorAll('.delete');
+    let popup;
+    let overlay;
+    let isPopupVisible = false;
+
+    deleteButtons.forEach(button => {
         button.addEventListener('click', function() {
-            var id = this.getAttribute('id');
-            var itemId = this.getAttribute('data-id');
-            
+            const id = this.getAttribute('id');
+            const itemId = this.getAttribute('data-id');
+
             overlay = document.createElement('div');
             overlay.className = 'overlay-delete';
-            overlay.addEventListener('click', function() {
+            overlay.addEventListener('click', () => {
                 if (isPopupVisible) {
                     document.body.removeChild(overlay);
                     document.body.removeChild(popup);
@@ -318,51 +350,66 @@
             popup = document.createElement('div');
             popup.className = 'popup-delete';
 
-            var icon = document.createElement('i');
+            const icon = document.createElement('i');
             icon.className = 'fa fa-trash';
             popup.appendChild(icon);
 
-            var content = document.createElement('p');
+            const content = document.createElement('p');
             content.innerText = 'Are you sure you want to delete this item?';
             popup.appendChild(content);
 
-            var confirmButton = document.createElement('button');
+            const confirmButton = document.createElement('button');
             confirmButton.innerText = 'Yes';
-            confirmButton.className = 'yes'; 
-       
-            confirmButton.addEventListener('click', function() {
+            confirmButton.className = 'yes';
+
+            confirmButton.addEventListener('click', () => {
                 if (isPopupVisible) {
-                    fetch('{{ route("remove", ":id") }}'.replace(':id', id), {
-                        method: 'DELETE',
-                        headers: {
-                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                        }
-                    })
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('Failed to delete item');
-                        }
+                   
+                    overlay.style.display = 'none';
+                    popup.style.display = 'none';
+                    isPopupVisible = false;
+                    
+                   
+                    const spinnerOverlay = document.createElement('div');
+                    spinnerOverlay.className = 'spinner-overlay';
+                    const spinner = document.createElement('div');
+                    spinner.className = 'spinner';
+                    spinnerOverlay.appendChild(spinner);
+                    document.body.appendChild(spinnerOverlay);
 
-                        updateTableAfterDeletion(id);
-                        updateNoDataAvailableRow(); 
+                    
+                    setTimeout(() => {
+                        fetch('{{ route("remove", ":id") }}'.replace(':id', id), {
+                            method: 'DELETE',
+                            headers: {
+                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                            }
+                        })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Failed to delete item');
+                            }
 
-                        document.body.removeChild(overlay);
-                        document.body.removeChild(popup);
-                        isPopupVisible = false;
-                    })
-                    .catch(error => {
-                        document.body.removeChild(overlay);
-                        document.body.removeChild(popup);
-                        isPopupVisible = false;
-                    });
+                            updateTableAfterDeletion(id);
+                            if (document.querySelectorAll('.delete').length === 0) {
+                                updateNoDataAvailableRow();
+                            }
+
+                            document.body.removeChild(spinnerOverlay); 
+                        })
+                        .catch(error => {
+                            console.error(error);
+                            document.body.removeChild(spinnerOverlay);
+                        });
+                    }, 2000); 
                 }
             });
 
 
-            var cancelButton = document.createElement('button');
+            const cancelButton = document.createElement('button');
             cancelButton.innerText = 'No';
             cancelButton.className = 'no';
-            cancelButton.addEventListener('click', function() {
+            cancelButton.addEventListener('click', () => {
                 if (isPopupVisible) {
                     document.body.removeChild(overlay);
                     document.body.removeChild(popup);
@@ -383,24 +430,32 @@
     });
 });
 
-function updateNoDataAvailableRow() {
-    var noDataAvailableRow = document.getElementById('noDataAvailableRow');
-    if (document.querySelectorAll('.delete').length === 0) {
-        noDataAvailableRow.style.display = 'table-row';
-    } else {
-        noDataAvailableRow.style.display = 'none';
-    }
-}
 
-function updateTableAfterDeletion(deletedItemId) {
+const updateNoDataAvailableRow = () => {
+    const noDataAvailableRow = document.getElementById('noDataAvailableRow');
+    if (noDataAvailableRow) {
+        if (document.querySelectorAll('.delete').length === 0) {
+            noDataAvailableRow.style.display = 'table-row';
+        } else {
+            noDataAvailableRow.style.display = 'none';
+        }
+    } else {
+        console.error("Element with id 'noDataAvailableRow' not found.");
+    }
+};
+
+
+
+const updateTableAfterDeletion = (deletedItemId) => {
     const tableRowToDelete = document.querySelector(`#dataTable tbody tr[data-id="${deletedItemId}"]`);
     if (tableRowToDelete) {
         tableRowToDelete.remove(); 
     }
-}
+};
 
 
-function createOverlay() {
+
+const createOverlay = () => {
     const overlay = document.createElement('div');
     overlay.style.position = 'absolute';
     overlay.style.top = 0;
@@ -409,113 +464,112 @@ function createOverlay() {
     overlay.style.height = '100%';
     overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.1)'; 
     overlay.style.zIndex = 1000; 
-    overlay.addEventListener('click', function(event) {
+    overlay.addEventListener('click', (event) => {
         event.stopPropagation();
     });
     return overlay;
-}
+};
 
-  document.addEventListener('DOMContentLoaded', function() {
-        const selectedOption = localStorage.getItem('selectedOption'); 
 
-        const content = document.querySelector('.content');
-        const url = content.querySelector('.url');
-        const image = content.querySelector('.image');
-        const selectOption = document.querySelector('#selectOption');
+document.addEventListener('DOMContentLoaded', () => {
+    const selectedOption = localStorage.getItem('selectedOption');
+    const selectOption = document.querySelector('#selectOption');
 
-        if (selectedOption) {
-            selectOption.value = selectedOption; 
-        }
+    const displayContent = (option) => {
+        const contents = document.querySelectorAll('.content');
+        contents.forEach(content => {
+            const url = content.querySelector('.url');
+            const image = content.querySelector('.image');
 
-        displayContent(selectOption.value); 
-
-        selectOption.addEventListener('change', function() {
-            localStorage.setItem('selectedOption', this.value); 
-            displayContent(this.value); 
+            if (option === 'url') {
+                url.style.display = 'inline';
+                image.style.display = 'none';
+            } else if (option === 'image') {
+                url.style.display = 'none';
+                image.style.display = 'inline';
+            }
         });
+    };
 
-        function displayContent(option) {
-            const contents = document.querySelectorAll('.content');
-            contents.forEach(content => {
-                const url = content.querySelector('.url');
-                const image = content.querySelector('.image');
+    const updateSelectValue = (option) => {
+        const selects = document.querySelectorAll('select');
+        selects.forEach(select => {
+            select.value = option;
+        });
+    };
 
-                if (option === 'url') {
-                    url.style.display = 'inline';
-                    image.style.display = 'none';
-                } else if (option === 'image') {
-                    url.style.display = 'none';
-                    image.style.display = 'inline';
-                }
-            });
-
-            const selects = document.querySelectorAll('select');
-            selects.forEach(select => {
-                select.value = option;
-            });
-        }
-
-
-    });
-
-    function showContent(select) {
-        const option = select.value;
-        const content = select.parentElement.querySelector('.content');
-        if (!content) {
-            return;
-        }
-        
-        const url = content.querySelector('.url');
-        const image = content.querySelector('.image');
-
-        if (option === 'url') {
-            if (url) url.style.display = 'inline';
-            if (image) image.style.display = 'none';
-        } else if (option === 'image') {
-            if (url) url.style.display = 'none';
-            if (image) image.style.display = 'inline';
-        }
-
-        if (select.value === select.options[0].value) {
-            if (url) url.style.display = 'inline';
-            if (image) image.style.display = 'none';
-        } else {
-            if (url) url.style.display = 'none';
-            if (image) image.style.display = 'inline';
-        }
+    if (selectedOption) {
+        selectOption.value = selectedOption;
     }
 
+    displayContent(selectOption.value);
+    updateSelectValue(selectOption.value);
 
-    document.addEventListener('DOMContentLoaded', function() {
+    selectOption.addEventListener('change', () => {
+        const selectedValue = selectOption.value;
+        localStorage.setItem('selectedOption', selectedValue);
+        displayContent(selectedValue);
+        updateSelectValue(selectedValue);
+    });
+});
+
+
+const showContent = (select) => {
+    const option = select.value;
+    const content = select.parentElement.querySelector('.content');
+    if (!content) {
+        return;
+    }
+    
+    const url = content.querySelector('.url');
+    const image = content.querySelector('.image');
+
+    if (option === 'url') {
+        url ? url.style.display = 'inline' : null;
+        image ? image.style.display = 'none' : null;
+    } else if (option === 'image') {
+        url ? url.style.display = 'none' : null;
+        image ? image.style.display = 'inline' : null;
+    }
+
+    if (select.value === select.options[0].value) {
+        url ? url.style.display = 'inline' : null;
+        image ? image.style.display = 'none' : null;
+    } else {
+        url ? url.style.display = 'none' : null;
+        image ? image.style.display = 'inline' : null;
+    }
+};
+
+
+document.addEventListener('DOMContentLoaded', () => {
     const images = document.querySelectorAll('.image');
     const overlay = document.getElementById('overlay');
     const modal = document.getElementById('modal');
     const modalImage = document.getElementById('modal-image');
     const closeBtn = document.querySelector('#modal .close');
 
-
     images.forEach(image => {
-        image.addEventListener('click', function() {
-            const imageUrl = this.getAttribute('src');
+        image.addEventListener('click', () => {
+            const imageUrl = image.getAttribute('src');
             modalImage.src = imageUrl;
             overlay.style.display = 'block';
             modal.style.display = 'block';
         });
     });
 
-    closeBtn.addEventListener('click', closeModal);
-    overlay.addEventListener('click', closeModal);
-
-    function closeModal(event) {
-        if (event.target === closeBtn) {
+    const closeModal = (event) => {
+        if (event.target === closeBtn || event.target === overlay) {
             overlay.style.display = 'none';
             modal.style.display = 'none';
         }
-    }
+    };
 
-
-
+    closeBtn.addEventListener('click', closeModal);
+    overlay.addEventListener('click', closeModal);
 });
+
+
 
 
 </script>

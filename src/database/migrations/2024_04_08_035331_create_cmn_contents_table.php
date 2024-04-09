@@ -11,7 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        //
+        Schema::create('cmn_contents', function (Blueprint $table) {
+            $table->id();
+            $table->integer('content_type')->default(0);
+            $table->timestamp('publish_started_at')->nullable();
+            $table->timestamps();
+        });
     }
 
     /**
@@ -19,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        //
+        Schema::dropIfExists('cmn_contents');
     }
 };
