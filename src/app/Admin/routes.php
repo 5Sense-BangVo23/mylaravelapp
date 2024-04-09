@@ -1,5 +1,7 @@
 <?php
 
+use App\Admin\Controllers\BannerController;
+use App\Admin\Controllers\PostController;
 use Illuminate\Routing\Router;
 
 Admin::routes();
@@ -12,5 +14,6 @@ Route::group([
 ], function (Router $router) {
 
     $router->get('/', 'HomeController@index')->name('home');
-
+    $router->resource('/banner', BannerController::class);
+    $router->resource('/post', PostController::class);
 });

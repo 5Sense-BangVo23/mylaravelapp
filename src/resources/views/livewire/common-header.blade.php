@@ -39,7 +39,25 @@
             <li class="menu-item" data-target="section-projects"><a href="#">PROJECTS</a></li>
             <li class="menu-item" data-target="section-certifications"><a href="#">CERTIFICATIONS</a></li>
             <li class="menu-item" data-target="section-contacts"><a href="#">CONTACTS</a></li>
+            @guest
+            <li class="menu-item"><a href="{{ route('login') }}">Login</a></li>
+            <li class="menu-item"><a href="{{ route('register') }}">Register</a></li>
+            @endguest
+            @auth
+                <li class="menu-item">
+                    <div class="user-profile">
+                        <p>Welcome, {{ Auth::user()->name }}</p>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST">
+                            @csrf
+                            <button type="submit" style="background: #fff; border:none;out-line:none;">
+                                <i class="fa fa-sign-out"></i>
+                            </button>
+                        </form>
+                    </div>
+                </li>
+            @endauth
         </ul>
     </nav>
+    
                    
 </header>

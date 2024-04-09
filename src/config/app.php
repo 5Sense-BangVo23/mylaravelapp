@@ -4,6 +4,9 @@ use Illuminate\Support\Facades\Facade;
 use Illuminate\Support\ServiceProvider;
 
 return [
+    'banners' => 'images/banners',
+
+    'content_per_page' => 10,
 
     'app.site_name' => 'My App',
     /*
@@ -169,6 +172,9 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        CloudinaryLabs\CloudinaryLaravel\CloudinaryServiceProvider::class,
+        Yajra\DataTables\DataTablesServiceProvider::class,
+
     ])->toArray(),
 
     /*
@@ -184,6 +190,12 @@ return [
 
     'aliases' => Facade::defaultAliases()->merge([
         // 'Example' => App\Facades\Example::class,
+        'Cloudinary' => CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary::class,
+
+        'UploadOption' => App\Facades\UploadFacade::class,
+        'Content' => App\Facades\ContentFacade::class,
+        'ContentClass' => App\Facades\ContentClassFacade::class,
+        'PostClass' => App\Facades\PostClassFacade::class,
     ])->toArray(),
 
 

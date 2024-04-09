@@ -138,6 +138,7 @@ article{
 
 /* -----------------  Menu Navigate------------------------ */
 /* Thêm đường kẻ trên và dưới chữ "MAIN" */
+
 .menu-item {
     display: flex;
     align-items: center;
@@ -199,8 +200,6 @@ article{
     }
 }
 
-
-
 /* ------------  Banner Slides -------------- */
 /* .banner-container {
     display: flex;
@@ -259,8 +258,8 @@ article{
 .banner-section{
     position: relative;
     margin-left: 11px;
-   max-width: 97vw;
-   z-index: 1;
+    max-width: 97vw;
+    z-index: 1;
 }
 .banner-container {
     display: flex;
