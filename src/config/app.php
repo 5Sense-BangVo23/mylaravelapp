@@ -196,6 +196,7 @@ return [
         'Content' => App\Facades\ContentFacade::class,
         'ContentClass' => App\Facades\ContentClassFacade::class,
         'PostClass' => App\Facades\PostClassFacade::class,
+        'WebRoute' => App\Facades\RouteFacade::class,
     ])->toArray(),
 
 

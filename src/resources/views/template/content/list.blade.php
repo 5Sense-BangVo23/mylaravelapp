@@ -90,10 +90,14 @@
     </header>
     <main>
         @foreach($list as $post)
+            {{-- @if($post)
+                @dump($post->commonData)
+            @endif --}}
+            {!! $html !!}
             <div class="post-card">
                 <article class="post">
-                    <p class="post-info"><strong>Published on:</strong> {{ $post->commonData->publish_started_at}}</p>
-                    <p class="post-info"><strong>Author:</strong> {{ $post->user }}</p>
+                    <p class="post-info"><strong>Published on:</strong> {{ $post->commonData['publish_started_at']}}</p>
+                    <p class="post-info"><strong>Author:</strong> {{ $post->user['name'] }}</p>
                     <p class="post-info"><strong>Category:</strong> Technology</p>
                     <img src="https://via.placeholder.com/800x400" alt="Post Image" class="post-image">
                     <p class="post-content">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vitae dolor a nisl scelerisque fringilla nec a libero. Mauris vestibulum fringilla purus, non pharetra lorem tempor vel. Suspendisse potenti. Integer semper aliquam est sit amet posuere. Nam condimentum lobortis ex. Ut nec mauris non velit ultrices congue. Suspendisse mollis pharetra eros, at mattis nisl pharetra non. Aliquam nec justo sed metus pharetra malesuada. Donec interdum vel nulla in lacinia. Proin quis congue libero.</p>
