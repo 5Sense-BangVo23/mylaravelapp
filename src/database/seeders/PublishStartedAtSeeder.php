@@ -17,4 +17,6 @@ class PublishStartedAtSeeder extends Seeder
             $record->update(['publish_started_at' => now()]);
         });
     }
+
+    // php artisan db:seed --class=PublishStartedAtSeeder
 }

@@ -21,6 +21,69 @@
     </x-slot>
     <x-slot name="head">
             <link rel="stylesheet" href="{{ config('app.asset_function')('css/register.css') }}">
+            <script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit"
+                async defer>
+            </script>
+            <script>
+                // ------------ RECAPTCHA ------------
+  var verifyCallback = function(response) {
+        if (response) {
+            console.log("reCAPTCHA verification successful!");
+        } else {
+            console.log("reCAPTCHA verification failed!");
+        }
+    };
+    var widgetId;
+    const params = {
+        sitekey: '{{ $site_key }}',
+        callback: verifyCallback,
+        theme: 'light'
+    };
+    console.log(params);
+
+    var onloadCallback = function() {
+        grecaptcha.ready(function(){
+            widgetId = grecaptcha.render('recaptcha-v2', params);
+        });
+    };
+
+    var resetRecaptcha = function() {
+        if (typeof grecaptcha !== 'undefined' && typeof widgetId !== 'undefined') {
+            grecaptcha.reset(widgetId);
+        } else {
+            console.error("reCAPTCHA widget or widgetId is undefined.");
+        }
+    };
+
+    var validateRecaptcha = function() {
+        if (typeof grecaptcha !== 'undefined' && typeof widgetId !== 'undefined') {
+            return grecaptcha.getResponse(widgetId).length !== 0;
+        } else {
+            console.error("reCAPTCHA widget or widgetId is undefined.");
+            return false;
+        }
+    };
+   
+        var onSubmit = function(token) {
+            document.getElementById("register-form").submit();
+        };
+   
+    document.addEventListener("DOMContentLoaded", function() {
+        var submitRegisterButton = document.getElementById("submit-register");
+
+        if (submitRegisterButton) {
+            submitRegisterButton.addEventListener("click", function(event) {
+                if (!validateRecaptcha()) {
+                    event.preventDefault();
+                    resetRecaptcha();
+                    return false;
+                }
+                return true;
+            });
+          }
+      });
+
+            </script>
     </x-slot>
 
     <div class="register-container">
@@ -30,7 +93,7 @@
                     <div class="register-card-header">Register</div>
     
                     <div class="register-card-body">
-                        <form method="POST" action="{{ route('register') }}">
+                        <form id="register-form" method="POST" action="{{ route('register') }}">
                             @csrf
     
                             <div class="register-form-group-row">
@@ -79,11 +142,28 @@
                                     <input id="password-confirm" type="password" class="register-control" name="password_confirmation" required autocomplete="new-password" placeholder="Confirm Password">
                                 </div>
                             </div>
+                            <div class="register-form-group-row">
+                                <div class="register-input">
+                                    <div id="recaptcha-v2" data-sitekey="{{ $site_key }}" data-secretkey="{{ $setcret_key }}"></div>
+                                </div>
+                               
+                            </div>
+
+                            <div class="register-form-group-row">
+                                <div class="register-input">
+                                    <div class="register-checkbox">
+                                        <input type="checkbox" name="terms" id="terms" class="register-checkbox-input">
+                                        <label for="terms" class="register-checkbox-label">
+                                            I agree to the <a href="#" class="register-link">terms and conditions</a>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
                             
     
                             <div class="register-form-group-row mb-0">
                                 <div class="register-input">
-                                    <button type="submit" class="register-button">
+                                    <button id="submit-register" type="submit" class="register-button">
                                         Register
                                     </button>
                                 </div>
