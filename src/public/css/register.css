@@ -18,8 +18,8 @@ body {
     border-radius: 8px;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
     padding: 40px;
-    width: 400px;
-    max-width: 90%;
+    width: 650px;
+    max-width: 100%;
     text-align: center;
 }
 
@@ -86,3 +86,47 @@ body {
     clip: rect(1px, 1px, 1px, 1px);
     white-space: nowrap;
 }
+
+/* ========================== */
+
+.register-checkbox-input {
+    /* Hide the default checkbox */
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+  }
+  
+  /* Style the custom checkbox */
+  .register-checkbox-input + .register-checkbox-label:before {
+    content: '';
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background-color: #fff; /* Background color of the checkbox */
+    border: 2px solid #ccc; /* Border color of the checkbox */
+    border-radius: 4px; /* Border radius to make it rounded */
+    vertical-align: middle;
+    margin-right: 10px; /* Spacing between checkbox and label text */
+  }
+  
+  /* Style the custom checkmark */
+  .register-checkbox-input:checked + .register-checkbox-label:before {
+    content: '\2713'; /* Unicode checkmark character */
+    font-size: 16px; /* Adjust size of the checkmark */
+    text-align: center;
+    line-height: 20px; /* Center the checkmark vertically */
+    color: #007bff; /* Color of the checkmark when checked */
+  }
+  
+  /* Style the label text */
+  .register-checkbox-label {
+    display: inline-block;
+    vertical-align: middle;
+    font-size: 14px;
+    color: #333; /* Text color */
+  }
+  
+  #recaptcha-v2{
+    display: flex;
+    justify-content: center;
+  }

@@ -174,6 +174,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         CloudinaryLabs\CloudinaryLaravel\CloudinaryServiceProvider::class,
         Yajra\DataTables\DataTablesServiceProvider::class,
+        TimeHunter\LaravelGoogleReCaptchaV2\Providers\GoogleReCaptchaV2ServiceProvider::class
 
     ])->toArray(),
 
@@ -197,7 +198,8 @@ return [
         'ContentClass' => App\Facades\ContentClassFacade::class,
         'PostClass' => App\Facades\PostClassFacade::class,
         'WebRoute' => App\Facades\RouteFacade::class,
-    ])->toArray(),
+        'GoogleReCaptchaV2'=> TimeHunter\LaravelGoogleReCaptchaV2\Facades\GoogleReCaptchaV2::class
+        ])->toArray(),
 
 
     'asset_function' => 'asset',

@@ -9,9 +9,19 @@ use Illuminate\Support\Facades\Hash;
 
 class RegisterController extends Controller
 {
+    private $recaptcha_site_key;
+    private $recaptcha_secret_key;
+
+    public function __construct()
+    {
+        $this->recaptcha_site_key = config('googlerecaptchav2.site_key');
+        $this->recaptcha_secret_key = config('googlerecaptchav2.secret_key');
+    }
     public function showRegistrationForm()
     {
-        return view('guest.auth.register');
+        $site_key = $this->recaptcha_site_key;
+        $setcret_key = $this->recaptcha_secret_key;
+        return view('guest.auth.register', compact('site_key', 'setcret_key'));
     }
 
     public function register(Request $request)
