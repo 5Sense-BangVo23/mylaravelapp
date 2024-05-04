@@ -31,7 +31,7 @@
                     <div class="login-card-header">Login</div>
     
                     <div class="login-card-body">
-                        <form method="POST" action="{{ route('login') }}">
+                        <form method="POST" action="{{ route('account.login') }}">
                             @csrf
     
                             <div class="login-form-group-row">
@@ -87,7 +87,7 @@
 
                             <div class="login-form-group-row mb-0">
                                 <div class="login-input">
-                                    <p>Don't have an account? <a href="{{ route('register') }}" class="login-link">Register here</a></p>
+                                    <p>Don't have an account? <a href="{{ route('account.register') }}" class="login-link">Register here</a></p>
                                 </div>
                             </div>
                         </form>

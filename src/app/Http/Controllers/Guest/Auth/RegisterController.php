@@ -36,8 +36,9 @@ class RegisterController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'remember_password' => $request->password,
         ]);
 
-        return redirect()->route('login')->with('success', 'Registration successful! Please log in.');
+        return redirect()->route('account.login')->with('success', 'Registration successful! Please log in.');
     }
 }

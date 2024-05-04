@@ -12,6 +12,7 @@ use App\Services\LocalUploadHandler;
 use App\Services\PostClassHandler;
 use App\Services\RouteService;
 use App\Services\UploadHandlerInterface;
+use App\Services\ExtractHtmlHandler;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -45,13 +46,14 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind('ContentClassService', ContentClassHandler::class);
         $this->app->bind('PostClassService', PostClassHandler::class);
         $this->app->bind('RouteService', RouteService::class);
+        $this->app->bind('ExtractorHtmlService', ExtractHtmlHandler::class);
 
 
         $this->app->singleton('WebRoute', function ($app) {
             return new RouteService();
         });
-        $this->app->singleton('WebExtractor', function ($app) {
-            return new HtmlExtractorService();
+        $this->app->singleton('WebExtractor', function ($httpClient) {
+            return new HtmlExtractorService($httpClient);
         });
     }
 

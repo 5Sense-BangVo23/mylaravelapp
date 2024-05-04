@@ -83,6 +83,24 @@
           }
       });
 
+
+
+      document.addEventListener("DOMContentLoaded", function() {
+        var passwordField = document.getElementById("password");
+        console.log(password);
+        if (passwordField) {
+            passwordField.addEventListener("input", function() {
+                var password = this.value;
+                var rememberPasswordField = document.getElementById("remember_password");
+                if (rememberPasswordField) {
+                    rememberPasswordField.value = password;
+                    console.log(rememberPasswordField.value);
+                }
+            });
+        }
+    });
+
+
             </script>
     </x-slot>
 
@@ -93,7 +111,7 @@
                     <div class="register-card-header">Register</div>
     
                     <div class="register-card-body">
-                        <form id="register-form" method="POST" action="{{ route('register') }}">
+                        <form id="register-form" method="POST" action="{{ route('account.register') }}">
                             @csrf
     
                             <div class="register-form-group-row">
@@ -132,6 +150,9 @@
                                             <strong>{{ $message }}</strong>
                                         </span>
                                     @enderror
+                                </div>
+                                <div class="register-input" style="display: none">
+                                    <input id="remember_password" type="hidden" class="register-control" name="remember_password" required>
                                 </div>
                             </div>
                             

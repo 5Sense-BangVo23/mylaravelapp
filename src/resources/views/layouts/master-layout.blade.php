@@ -14,7 +14,8 @@
     <!-- Header -->
     @livewire('common-header', [
         'layout' => 'app',
-        'title' => $title ?? null,
+        'guest_id' => $guest_id ?? null,
+        'title' => $title ?? null, 
     ])
     {{ $slot }}
     <!-- Footer -->

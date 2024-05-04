@@ -6,16 +6,24 @@ services:
       dockerfile: Dockerfile
     image: mylaravelapp
     container_name: mylaravelapp
-    restart: unless-stopped
+    restart: always
     ports:
       - "8001:8000"
     volumes:
       - ./src:/var/www/html
+    working_dir: /var/www/html
+    environment:
+        - DB_CONNECTION=mysql
+        - DB_HOST=db
+        - DB_PORT=3306
+        - DB_DATABASE=mylaraveldb
+        - DB_USERNAME=root
+        - DB_PASSWORD=takemyhand
     networks:
       - app-network
 
   db:
-    image: mysql:8.0.33
+    image: mysql:8.3.0
     platform: linux/amd64
     container_name: mysql
     restart: unless-stopped
@@ -23,12 +31,13 @@ services:
     ports:
       - "3300:3306"
     environment:
+      TZ: UTC
       MYSQL_DATABASE: mylaraveldb
       MYSQL_ROOT_PASSWORD: takemyhand
       MYSQL_USER: mylaraveluser
       MYSQL_PASSWORD: takemyhand
     volumes:
-      - ./data/mysql:/var/lib/mysql
+      - ./src/mysql-data:/var/lib/mysql
     networks:
       - app-network
 

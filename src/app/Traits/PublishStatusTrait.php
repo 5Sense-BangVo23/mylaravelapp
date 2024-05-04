@@ -1,9 +1,24 @@
 <?php
 namespace App\Traits;
 
+use App\Models\MstPublishStatus;
 use Encore\Admin\Facades\Admin;
 
 trait PublishStatusTrait{
+
+    public function publishStatus()
+    {
+        $status = MstPublishStatus::pluck('id', 'name');
+
+        if (\Admin::guard()->user()) {
+            $r[] = $status['Expected Release'];
+        }
+        $r[] = $status['Release'];
+        $r[] = $status['Limited Release'];
+
+        return $r;
+    }
+
     public function publishList($model)
     {
         if (Admin::guard()->user()) {
@@ -15,5 +30,5 @@ trait PublishStatusTrait{
         }
     }
 
-    public func
+   
 }
