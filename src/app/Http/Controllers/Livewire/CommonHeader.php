@@ -16,7 +16,11 @@ class CommonHeader extends Component
     {
         $this->layout = $layout;
         if (Auth::check()) {
-            $this->guest_id = Auth::user()->id;
+            $this->guest_id = Auth::user()->id;       
+            session(['guest_id' => $this->guest_id]); 
+        }else{
+            $this->guest_id = null;
+            session(['guest_id' => $this->guest_id]);
         }
         $this->title = $title;
 

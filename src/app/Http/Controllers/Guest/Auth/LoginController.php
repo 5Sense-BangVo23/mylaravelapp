@@ -32,11 +32,7 @@ class LoginController extends Controller
     
     public function logout(Request $request){
         Auth::logout();
-        $guestId = $request->input('guest_id');
-        if($guestId){
-            session(['guest_id' => $guestId]);
-            return redirect()->route('welcome');
-        }
+       
         return redirect()->route('account.login');
     }
 }

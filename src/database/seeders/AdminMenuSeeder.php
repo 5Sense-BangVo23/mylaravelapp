@@ -158,7 +158,7 @@ class AdminMenuSeeder extends Seeder
                 "order" => 8300002,
                 "title" => "List",
                 "icon" => "fa-tasks",
-                "uri" => "/guest",
+                "uri" => "/category",
             ),      
             array(
                 "id" => 8400000,
