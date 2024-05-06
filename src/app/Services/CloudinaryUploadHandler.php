@@ -2,18 +2,24 @@
 
 namespace App\Services;
 
+use App\Events\FileUploaded;
+use App\Events\UploadCompleted;
+use App\Jobs\ProcessMedia;
+use App\Mail\MediaProcessedMail;
 use App\Models\Media;
 use App\Models\UploadedFile as ObjUploadedFile;
 use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
+use Faker\Core\File;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 class CloudinaryUploadHandler implements UploadHandlerInterface
 {
     public function upload($request)
     {
         $uploadedFile = $request->file('file');
-
+       
         switch ($this->getFileType($uploadedFile)) {
             case 'image':
                 return $this->uploadImage($uploadedFile);
@@ -57,7 +63,11 @@ class CloudinaryUploadHandler implements UploadHandlerInterface
             $media = $this->saveMediaInfo($cloudinaryUpload, $uploadedFile);
             $fileUploaded = $this->saveUploadedInfo($cloudinaryUpload);
             if ($media && $fileUploaded) {
+                event(new FileUploaded(true, 'Image uploaded successfully', $media));
                 return true;
+            } else {
+                event(new FileUploaded(false, 'Failed to upload image', $media));
+               return false;
             }
         }
         return false;
@@ -73,7 +83,11 @@ class CloudinaryUploadHandler implements UploadHandlerInterface
             $media = $this->saveMediaInfo($cloudinaryUpload, $uploadedFile);
             $fileUploaded = $this->saveUploadedInfo($cloudinaryUpload);
             if ($media && $fileUploaded) {
+                event(new FileUploaded(true, 'Video uploaded successfully', $media));
                 return true;
+            } else {
+                event(new FileUploaded(false, 'Failed to upload video', $media));
+               return false;
             }
         }
         return false;
@@ -109,13 +123,18 @@ class CloudinaryUploadHandler implements UploadHandlerInterface
             'public_id' => $publicId,
         ];
     
-        switch ($fileType) {
-            case 'image':
-                $options['resource_type'] = 'image';
-                break;
-            case 'video':
-                $options['resource_type'] = 'video';
-                break;
+        if ($uploadedFile->getSize() > 2 * 1024 * 1024) {
+            $options['resource_type'] = 'raw';
+        } else {
+            
+            switch ($fileType) {
+                case 'image':
+                    $options['resource_type'] = 'image';
+                    break;
+                case 'video':
+                    $options['resource_type'] = 'video';
+                    break;
+            }
         }
     
         return Cloudinary::upload($uploadedFile->getRealPath(), $options);
