@@ -2,6 +2,7 @@
 namespace App\Services;
 
 use App\Models\Media;
+use App\Models\UploadedFile as ObjUploadedFile;
 use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
@@ -20,9 +21,15 @@ class CloudinaryUploadHandler implements UploadHandlerInterface
 
         if ($cloudinaryUpload) {
             $media = $this->saveMediaInfo($cloudinaryUpload, $uploadedFile);
+            $fileUploaded = new ObjUploadedFile();
+            $fileUploaded->file_name = $cloudinaryUpload->getOriginalFileName();
+            $fileUploaded->public_id = $cloudinaryUpload->getPublicId();
+            $fileUploaded->url = $cloudinaryUpload->getSecurePath();
+            $fileUploaded->save();        
             if ($media) {
                 return true;
             }
+
         }
         return false;
     }

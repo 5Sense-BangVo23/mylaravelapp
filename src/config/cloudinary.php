@@ -49,4 +49,7 @@ return [
      * Controller action to get cloud_image_url from Blade Upload Widget
      */
     'upload_action' => env('CLOUDINARY_UPLOAD_ACTION'),
+
+
+    'max_file_size' => 2000000000, // 2000 MB
 ];

@@ -155,13 +155,19 @@
         <!-- Upload form -->
         <form id="uploadForm" action="{{ route('upload') }}" method="POST" enctype="multipart/form-data">
             @csrf
-
+            {{-- @cloudinaryJS --}}
             <!-- Custom file upload -->
             <div class="file-upload-group">
                 <label for="file-upload" class="custom-file-upload">
                     <span>Choose File</span>
+                    {{-- <x-cld-upload-button>
+                        Upload Files
+                    </x-cld-upload-button> --}}
                 </label>
-                <input id="file-upload" type="file" name="file" accept="image/*" style="display: none;">
+                <input id="file-upload" type="file" wire:model="file" name="file" style="display: none;">
+                {{-- <x-cld-image public-id="{{ $public_id }}" width="300" height="300"></x-cld-image> --}}
+
+                {{-- <x-cld-video public-id="{{ $public_id }}"></x-cld-video>  --}}
             </div>
 
             <!-- Image preview -->

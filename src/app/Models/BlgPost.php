@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use CloudinaryLabs\CloudinaryLaravel\MediaAlly;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class BlgPost extends Model
 {
     use HasFactory;
+    use MediaAlly;
 
     protected $table = 'blg_posts';
     protected $fillable = [
