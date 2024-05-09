@@ -146,6 +146,19 @@
             .login-form input[type="password"].filled + label {
                 display: none;
             }
+           /* Initially hide the border for filled inputs */
+            .login-form input[type="text"].filled,
+            .login-form input[type="password"].filled {
+                border: 1px solid transparent; /* Set border to transparent for filled inputs */
+            }
+
+            /* Show the border when input is focused or has content */
+            .login-form input[type="text"].filled:focus,
+            .login-form input[type="text"].filled:not(:focus),
+            .login-form input[type="password"].filled:focus,
+            .login-form input[type="password"].filled:not(:focus) {
+                border: 1px solid #ff0066; /* Change the border color as needed */
+            }
 
             .login-form input[type="text"] + label,
             .login-form input[type="password"] + label {
@@ -203,14 +216,16 @@
                 const inputs = document.querySelectorAll('.login-form input');
 
                 inputs.forEach(input => {
+                
                     input.addEventListener('input', function () {
-                    if (this.value.trim() !== '') {
-                            this.classList.add('filled');
-                    } else {
-                    this.classList.remove('filled');
-                    }
+                      
+                        if (this.value.trim() !== '') {
+                                this.classList.add('filled');
+                        } else {
+                        this.classList.remove('filled');
+                        }
                  });
-});
+                });
 
             });
         </script>
