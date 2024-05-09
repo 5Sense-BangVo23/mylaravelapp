@@ -1,3 +1,4 @@
+<!-- Login Form -->
 <x-kpop-layout>
     @php
     $title = config('app.site_name');
@@ -10,7 +11,7 @@
         {{ $title }}
     </x-slot>
     <x-slot name="title">Login</x-slot>
-  
+
     <x-slot name="meta">
         <meta name="description" content="{{ $description }}">
         <meta property="og:description" content="{{ $description }}" />
@@ -19,7 +20,7 @@
         <meta property="og:image" content="{{ $image }}" />
         <meta name="csrf-token" content="{{ csrf_token() }}">
     </x-slot>
-  
+
     <x-slot name="head">
         <style>
             /* CSS cho giao diện đăng nhập với phong cách Kpop */
@@ -96,8 +97,8 @@
                 transform: translate(-50%, -50%) rotate(60deg); /* Điều chỉnh vị trí và góc xoay cho hình ảnh */
                 z-index: 1; /* Điều chỉnh z-index để xếp hình ảnh lên trên */
             }
-  
-  
+
+
             .background-images img.active {
                 opacity: 1; /* Hiển thị hình ảnh hiện tại */
             }
@@ -138,10 +139,22 @@
                 border-radius: 25px;
                 background-color: #f0f0f0;
                 outline: none;
+                position: relative;
             }
+
+            .login-form input[type="text"].filled + label,
+            .login-form input[type="password"].filled + label {
+                display: none;
+            }
+
             .login-form input[type="text"] + label,
             .login-form input[type="password"] + label {
                 color: #999;
+                position: absolute;
+                top: 50%;
+                left: 20px;
+                transform: translateY(-50%);
+                transition: top 0.3s ease, font-size 0.3s ease, color 0.3s ease;
             }
             .login-form input[type="text"]:focus + label,
             .login-form input[type="password"]:focus + label {
@@ -165,8 +178,6 @@
             .login-form button:hover {
                 background-color: #ff0044;
             }
-  
-  
             @keyframes slideOutRight {
                 0% {
                     transform: translateX(0); /* Không di chuyển ban đầu */
@@ -187,10 +198,24 @@
                     currentIndex = (currentIndex + 1) % images.length;
                     images[currentIndex].classList.add('active');
                 }, 5000); // Thay đổi ảnh sau mỗi 5 giây
+
+                        
+                const inputs = document.querySelectorAll('.login-form input');
+
+                inputs.forEach(input => {
+                    input.addEventListener('input', function () {
+                    if (this.value.trim() !== '') {
+                            this.classList.add('filled');
+                    } else {
+                    this.classList.remove('filled');
+                    }
+                 });
+});
+
             });
         </script>
     </x-slot>
-  
+
     <div class="background-container">
       <div class="background-images">
           <img src="{{config('app.asset_function')('images/kpop/blackpink/blackpink-image-1.jpeg')}}" alt="Background Image 1" class="active">
@@ -225,6 +250,5 @@
             <p>Don't have an account ! <a href="{{ route('kpop.register') }}"> Go</a></p>
         </div>
     </div>
-  
-  </x-kpop-layout>
-  
+
+</x-kpop-layout>
