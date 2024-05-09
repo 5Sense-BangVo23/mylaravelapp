@@ -230,6 +230,37 @@
                     opacity: 0; /* Ẩn đi */
                 }
             }
+
+            .hidden {
+                opacity: 0;
+                height: 0;
+                overflow: hidden;
+                transition: opacity 0.3s ease, height 0.3s ease;
+            }
+
+            /* Define the keyframes for spinning animation */
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Apply styles to the processing span */
+        .processing {
+            color: #049904;
+            font-size: 1.8rem;
+        }
+
+        /* Style the circle loader */
+        .circle-load {
+            display: inline-block;
+            width: 1em;
+            height: 1em;
+            border: 0.15em dotted #049904; /* Circle border color */
+            border-top: 0.15em solid transparent; /* Hide the top border to create a circle */
+            border-radius: 50%; /* Make it a circle */
+            animation: spin 1s linear infinite; /* Apply the spin animation */
+        }
+
         </style>
         <script>
             document.addEventListener('DOMContentLoaded', function () {
@@ -255,6 +286,32 @@
                         }
                  });
                 });
+
+               
+                const loginForm = document.querySelector('.login-form');
+    const loadingSpinner = document.getElementById('loading-spinner');
+
+    loginForm.addEventListener('submit', function (event) {
+        // Prevent the default form submission behavior
+        event.preventDefault();
+
+        // Hide the login button immediately
+        const loginButton = event.target.querySelector('button[type="submit"]');
+        if (loginButton) {
+            loginButton.style.display = 'none';
+        }
+
+        // Show the loading spinner
+        if (loadingSpinner) {
+            loadingSpinner.classList.remove('hidden');
+        }
+
+        // Simulate a delay using setTimeout
+        setTimeout(function () {
+            // Redirect to the dashboard page after the timeout
+            window.location.href = "{{ route('kpop.dashboard') }}";
+        }, 2000); // Adjust the timeout duration as needed
+    });
 
             });
         </script>
@@ -287,12 +344,17 @@
                 <span class="text-danger">{{ $message }}</span>
             @enderror --}}
             <button type="submit">Login</button>
+            <div id="loading-spinner" class="hidden">
+                <!-- Add your loading spinner or animation here -->
+                <span class="processing">Processing <strong class="circle-load"></strong></span>
+            </div>
         </form>
 
         <!-- Your existing register link -->
         <div class="register-link">
             <p>Don't have an account ! <a href="{{ route('kpop.register') }}"> Go</a></p>
         </div>
+       
     </div>
 
 </x-kpop-layout>

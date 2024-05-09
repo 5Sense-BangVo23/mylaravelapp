@@ -20,8 +20,17 @@
     <x-slot name="head">
     </x-slot>
     <header> 
-        <h1>{{ $title }}</h1>
+        <h1>{{ $title }}</h1>   
+     
+        @auth('kpop-admin') <!-- Use the 'kpop-admin' guard -->
+            <p>Welcome, {{ auth('kpop-admin')->user()->name }}</p>
+            <form method="POST" action="{{ route('kpop.logout') }}">
+                @csrf
+                <button type="submit">Logout</button>
+            </form>
+        @endauth
     </header>
+    
 
    
 </x-kpop-layout>
