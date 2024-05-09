@@ -6,6 +6,8 @@ use App\Http\Controllers\CloudinaryController;
 use App\Http\Controllers\ContentListController;
 use App\Http\Controllers\Guest\Auth\LoginController as AuthLoginController;
 use App\Http\Controllers\Guest\Auth\RegisterController as AuthRegisterController;
+use App\Http\Controllers\KPopLoginController;
+use App\Http\Controllers\KPopRegisterController;
 use App\Http\Controllers\Media\Auth\LoginController as AuthCloudinaryController;
 use App\Http\Controllers\WelcomeController;
 use App\Http\Middleware\AdminMiddleware;

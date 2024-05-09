@@ -39,11 +39,11 @@
                             
                                 <div class="login-input">
                                     <input id="username_or_email" type="text" class="login-control @error('username_or_email') login-is-invalid @enderror" name="username_or_email" value="{{ old('username_or_email') }}" required autocomplete="username_or_email" autofocus placeholder="Username or Email Address">
-                                    @error('username_or_email')
+                                    {{-- @error('username_or_email')
                                         <span class="login-error-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
                                         </span>
-                                    @enderror
+                                    @enderror --}}
                                 </div>
                             </div>
                             
@@ -52,11 +52,11 @@
                             
                                 <div class="login-input">
                                     <input id="password" type="password" class="login-control @error('password') login-is-invalid @enderror" name="password" required autocomplete="current-password" placeholder="Password">
-                                    @error('password')
+                                    {{-- @error('password')
                                         <span class="login-error-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
                                         </span>
-                                    @enderror
+                                    @enderror --}}
                                 </div>
                             </div>
                             

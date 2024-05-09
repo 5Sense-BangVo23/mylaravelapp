@@ -35,7 +35,7 @@
         cursor: pointer;
     }
 
-    .close:hover,
+.close:hover,
     .close:focus {
         color: black;
         text-decoration: none;
