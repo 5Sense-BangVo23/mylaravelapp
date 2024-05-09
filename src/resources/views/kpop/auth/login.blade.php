@@ -160,6 +160,35 @@
                 border: 1px solid #ff0066; /* Change the border color as needed */
             }
 
+             /* Add hover effect to create border animation */
+            .login-form input[type="text"].filled:hover,
+            .login-form input[type="password"].filled:hover {
+                position: relative;
+            }
+
+            .login-form input[type="text"].filled:hover::before,
+            .login-form input[type="password"].filled:hover::before {
+                content: '';
+                position: absolute;
+                top: -1px;
+                left: -1px;
+                right: -1px;
+                bottom: -1px;
+                border: 2px solid #ff0066; /* Change the border color and thickness as needed */
+                border-radius: 25px;
+                animation: borderHover 1s infinite alternate; /* Adjust animation duration and timing as needed */
+            }
+
+            @keyframes borderHover {
+                from {
+                    transform: translateX(-100%);
+                }
+                to {
+                    transform: translateX(100%);
+                }
+            }
+
+
             .login-form input[type="text"] + label,
             .login-form input[type="password"] + label {
                 color: #999;
