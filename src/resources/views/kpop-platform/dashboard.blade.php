@@ -22,13 +22,14 @@
     <header> 
         <h1>{{ $title }}</h1>   
      
-        @auth('kpop-admin') <!-- Use the 'kpop-admin' guard -->
-            <p>Welcome, {{ auth('kpop-admin')->user()->name }}</p>
+        @if (Auth::guard('kpop-admin')->check())
+            <p>Welcome, {{ Auth::guard('kpop-admin')->user()->name }}</p>
             <form method="POST" action="{{ route('kpop.logout') }}">
                 @csrf
                 <button type="submit">Logout</button>
             </form>
-        @endauth
+        @endif
+        
     </header>
     
 

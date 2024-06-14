@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Guest\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Mail\CreateNewAccountSendMail;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 
 class RegisterController extends Controller
 {
@@ -31,13 +33,13 @@ class RegisterController extends Controller
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8',
         ]);
-
-        User::create([
+        $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'remember_password' => $request->password,
+            'remember_password' => $request->password, // It's generally not a good practice to store plaintext passwords.
         ]);
+        Mail::to($user->email)->send(new CreateNewAccountSendMail($user));
 
         return redirect()->route('account.login')->with('success', 'Registration successful! Please log in.');
     }

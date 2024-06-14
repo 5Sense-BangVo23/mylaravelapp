@@ -11,11 +11,11 @@ Route::middleware(['kpop-admin'])->group(function () {
     // dd('This is the admin route');
     // Login
     Route::get('/kpop/login', [KPopLoginController::class, 'showLoginForm'])->name('kpop.login');
-    Route::post('/kpop/login', [KPopLoginController::class, 'login'])->name('kpop.login.submit');
+    Route::post('/kpop/login', [KPopLoginController::class, 'login']);
    
     // Routes for KPop idols registration
     Route::get('/kpop/register', [KPopRegisterController::class, 'showRegistrationForm'])->name('kpop.register');
-    Route::post('/kpop/register', [KPopRegisterController::class, 'register'])->name('kpop.register.submit');
+    Route::post('/kpop/register', [KPopRegisterController::class, 'register']);
 
     Route::get('/kpop/dashboard',[DashboardController::class,'show'])->name('kpop.dashboard');
 });

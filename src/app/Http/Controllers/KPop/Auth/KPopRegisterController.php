@@ -20,18 +20,17 @@ class KPopRegisterController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:kpop_admins',
-            'password' => 'required|string|min:8|confirmed',
+            'password' => 'required|string|min:8',
         ]);
 
-        $idol = KPopAdmin::create([
+        KPopAdmin::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'remember_password' => $request->password,
         ]);
 
-        Auth::login($idol);
-
-        return redirect()->route('kpop.login');
+        return redirect()->route('kpop.login')->with('success', 'Registration successful! Please log in.');
     }
     
 }

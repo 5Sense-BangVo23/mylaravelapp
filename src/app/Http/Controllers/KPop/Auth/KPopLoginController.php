@@ -16,18 +16,23 @@ class KPopLoginController extends Controller
     public function login(Request $request)
     {
         $credentials = $request->only('username_or_email', 'password');
-       
+        
         // Attempt to authenticate using email
         if (Auth::attempt(['email' => $credentials['username_or_email'], 'password' => $credentials['password']])) {
-           
-            return redirect()->route('kpop.dashboard');
+            return redirect()->intended('/');
         }
     
         // Attempt to authenticate using username
         if (Auth::attempt(['name' => $credentials['username_or_email'], 'password' => $credentials['password']])) {
-            return redirect()->route('kpop.dashboard');
+            return redirect()->intended('/');
         }   
         return back()->withErrors(['username_or_email' => 'Invalid credentials']);
+    }
+    
+
+    public function logout(Request $request){
+        Auth::logout();
+        return redirect()->route('kpop.login');
     }
     
 
