@@ -8,7 +8,9 @@
         "php": "^8.2",
         "cloudinary-labs/cloudinary-laravel": "^2.1",
         "encore/laravel-admin": "^1.8",
+        "google/apiclient": "^2.16",
         "guzzlehttp/guzzle": "^7.3",
+        "laravel/fortify": "^1.21",
         "laravel/framework": "^10.0",
         "laravel/sanctum": "^3.3",
         "laravel/tinker": "^2.8",
@@ -50,12 +52,19 @@
         ],
         "post-create-project-cmd": [
             "@php artisan key:generate --ansi"
-        ]
+        ],
+        "pre-autoload-dump": "Google\\Task\\Composer::cleanup"
     },
     "extra": {
         "laravel": {
             "dont-discover": []
-        }
+        },
+        "google/apiclient-services": [
+            "Drive",
+            "YouTube",
+            "YouTubeAnalytics",
+            "YouTubeReporting"
+        ]
     },
     "config": {
         "optimize-autoloader": true,

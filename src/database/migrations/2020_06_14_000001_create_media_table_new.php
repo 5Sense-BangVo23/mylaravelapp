@@ -6,17 +6,26 @@ use Illuminate\Database\Migrations\Migration;
 
 class CreateMediaTableNew extends Migration
 {
+   /**
+     * Run the migrations.
+     *
+     * @return void
+     */
     public function up()
     {
-        Schema::create('media', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->morphs('medially');
-            $table->text('file_url');
-            $table->string('file_name');
-            $table->string('file_type')->nullable();
-            $table->unsignedBigInteger('size');
-            $table->timestamps();
-        });
+      
+        if (!Schema::hasTable('media')) {
+           
+            Schema::create('media', function (Blueprint $table) {
+                $table->bigIncrements('id');
+                $table->morphs('medially');
+                $table->text('file_url');
+                $table->string('file_name');
+                $table->string('file_type')->nullable();
+                $table->unsignedBigInteger('size');
+                $table->timestamps();
+            });
+        }
     }
 
     /**
@@ -26,6 +35,9 @@ class CreateMediaTableNew extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('media');
+        
+        if (Schema::hasTable('media')) {
+            Schema::dropIfExists('media');
+        }
     }
 }

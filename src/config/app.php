@@ -198,6 +198,7 @@ return [
         'ContentClass' => App\Facades\ContentClassFacade::class,
         'PostClass' => App\Facades\PostClassFacade::class,
         'WebRoute' => App\Facades\RouteFacade::class,
+        'ExtractorHtml' => App\Facades\ExtractorHtmlFacade::class,
         'GoogleReCaptchaV2'=> TimeHunter\LaravelGoogleReCaptchaV2\Facades\GoogleReCaptchaV2::class
         ])->toArray(),
 

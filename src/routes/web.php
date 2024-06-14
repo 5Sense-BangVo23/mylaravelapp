@@ -6,6 +6,8 @@ use App\Http\Controllers\CloudinaryController;
 use App\Http\Controllers\ContentListController;
 use App\Http\Controllers\Guest\Auth\LoginController as AuthLoginController;
 use App\Http\Controllers\Guest\Auth\RegisterController as AuthRegisterController;
+use App\Http\Controllers\KPopLoginController;
+use App\Http\Controllers\KPopRegisterController;
 use App\Http\Controllers\Media\Auth\LoginController as AuthCloudinaryController;
 use App\Http\Controllers\WelcomeController;
 use App\Http\Middleware\AdminMiddleware;
@@ -38,17 +40,17 @@ Route::prefix('admin')->group(function () {
 // Routes for guest authentication
 Route::middleware(['guest'])->group(function () {
     // Route for login
-    Route::get('login', [AuthLoginController::class, 'showLoginForm'])->name('login');
-    Route::post('login', [AuthLoginController::class, 'login']);
+    Route::get('/account/login', [AuthLoginController::class, 'showLoginForm'])->name('account.login');
+    Route::post('/account/login', [AuthLoginController::class, 'login']);
 
     // Route for registration
-    Route::get('register', [AuthRegisterController::class, 'showRegistrationForm'])->name('register');
-    Route::post('register', [AuthRegisterController::class, 'register']);
+    Route::get('/account/register', [AuthRegisterController::class, 'showRegistrationForm'])->name('account.register');
+    Route::post('/account/register', [AuthRegisterController::class, 'register']);
 });
 
 // Route for logout
-Route::post('logout', [AuthLoginController::class,'logout'])->name('logout');
-Route::get('logout', [AuthLoginController::class,'logout'])->name('logout');
+Route::post('/account/logout', [AuthLoginController::class,'logout'])->name('account.logout');
+Route::get('/account/logout', [AuthLoginController::class,'logout'])->name('account.logout');
 
 // Default route
 Route::get('/', WelcomeController::class)->name('welcome');

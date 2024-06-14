@@ -1,6 +1,8 @@
 <?php
 
 use App\Admin\Controllers\BannerController;
+use App\Admin\Controllers\CategoryController;
+use App\Admin\Controllers\GuestController;
 use App\Admin\Controllers\PostController;
 use Illuminate\Routing\Router;
 
@@ -16,4 +18,6 @@ Route::group([
     $router->get('/', 'HomeController@index')->name('home');
     $router->resource('/banner', BannerController::class);
     $router->resource('/post', PostController::class);
+    $router->resource('/category', CategoryController::class);
+    $router->resource('/guest', GuestController::class);
 });

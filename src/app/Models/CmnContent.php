@@ -13,4 +13,9 @@ class CmnContent extends Model
         'content_type',
         'publish_started_at',
     ];
+
+    public function categories(){
+        return $this->belongsToMany(BlgCategory::class, 'blg_content_categories', 'content_id', 'category_id', 'id');
+    }
+
 }

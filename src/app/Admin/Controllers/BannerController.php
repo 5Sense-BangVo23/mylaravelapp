@@ -54,8 +54,7 @@ class BannerController extends AdminController
                 $currentDateTime = now()->format('Y_m_d_H_i_s');
                 $imgName = "banner_images_" . $currentDateTime . '.png';
                 return $imgName;
-            })
-            ->required(true);
+            })->removable()->required(true);
         $form->text('link', 'Link');
         $form->number('position', 'Position')->rules('required');
         $form->switch('status', 'Status')->default(1);
@@ -64,9 +63,9 @@ class BannerController extends AdminController
         //         $form->image = $form->image->store('banners', 'public');
         //     }
         // });
-        $form->saved(function (Form $form) {
+        // $form->saved(function (Form $form) {
           
-        });
+        // });
         return $form;
     }
 

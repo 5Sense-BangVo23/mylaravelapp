@@ -31,7 +31,7 @@
                     <div class="login-card-header">Login</div>
     
                     <div class="login-card-body">
-                        <form method="POST" action="{{ route('login') }}">
+                        <form method="POST" action="{{ route('account.login') }}">
                             @csrf
     
                             <div class="login-form-group-row">
@@ -39,11 +39,11 @@
                             
                                 <div class="login-input">
                                     <input id="username_or_email" type="text" class="login-control @error('username_or_email') login-is-invalid @enderror" name="username_or_email" value="{{ old('username_or_email') }}" required autocomplete="username_or_email" autofocus placeholder="Username or Email Address">
-                                    @error('username_or_email')
+                                    {{-- @error('username_or_email')
                                         <span class="login-error-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
                                         </span>
-                                    @enderror
+                                    @enderror --}}
                                 </div>
                             </div>
                             
@@ -52,11 +52,11 @@
                             
                                 <div class="login-input">
                                     <input id="password" type="password" class="login-control @error('password') login-is-invalid @enderror" name="password" required autocomplete="current-password" placeholder="Password">
-                                    @error('password')
+                                    {{-- @error('password')
                                         <span class="login-error-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
                                         </span>
-                                    @enderror
+                                    @enderror --}}
                                 </div>
                             </div>
                             
@@ -87,7 +87,7 @@
 
                             <div class="login-form-group-row mb-0">
                                 <div class="login-input">
-                                    <p>Don't have an account? <a href="{{ route('register') }}" class="login-link">Register here</a></p>
+                                    <p>Don't have an account? <a href="{{ route('account.register') }}" class="login-link">Register here</a></p>
                                 </div>
                             </div>
                         </form>

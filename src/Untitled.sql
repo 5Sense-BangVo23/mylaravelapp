@@ -1,0 +1,1 @@
+SELECT * FROM mylaraveldb.mst_publish_statuses;

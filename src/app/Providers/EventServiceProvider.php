@@ -2,6 +2,11 @@
 
 namespace App\Providers;
 
+use App\Events\FileUploaded;
+use App\Events\MediaProcessed;
+use App\Listeners\SendMediaProcessedNotification;
+use App\Listeners\SendUploadFailureNotification;
+use App\Listeners\SendUploadSuccessNotification;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -17,6 +22,10 @@ class EventServiceProvider extends ServiceProvider
     protected $listen = [
         Registered::class => [
             SendEmailVerificationNotification::class,
+        ],
+        FileUploaded::class => [
+            SendUploadSuccessNotification::class,
+            SendUploadFailureNotification::class,
         ],
     ];
 

@@ -1,0 +1,7 @@
+<div>
+    <h1>{{ $uploadedMessage }}</h1>
+    @if(isset($media->file_url))
+        <a href="{{ $media->file_url }}">View uploaded file</a>
+    @endif
+    <p>Uploaded successfully!</p>
+</div>
