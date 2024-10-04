@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome to Our Platform</title>
+    <title>Login Notification</title>
     <style>
         /* Reset styles */
         body, html {
@@ -36,7 +36,7 @@
         .header h1 {
             margin: 0;
             font-size: 28px;
-            color: #2c3e50;
+            color: #3498db;
         }
 
         /* Content styles */
@@ -86,13 +86,14 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>Welcome, {{ $name }}!</h1>
+            <h1>Hello, {{ $name }}!</h1>
         </div>
         <div class="content">
-            <p>Thank you for registering at our platform. We are thrilled to have you with us.</p>
+            <p>You have successfully logged in to your account on {{ $loginTime }}.</p>
+            <p>For security reasons, please remember to log out when you're done.</p>
         </div>
         <div class="footer">
-            <p>If you have any questions, feel free to contact us at support@example.com.</p>
+            <p>This email was sent to {{ $email }}. If you received this email by mistake, please ignore it.</p>
         </div>
     </div>
 </body>

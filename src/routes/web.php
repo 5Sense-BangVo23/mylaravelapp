@@ -6,12 +6,17 @@ use App\Http\Controllers\CloudinaryController;
 use App\Http\Controllers\ContentListController;
 use App\Http\Controllers\Guest\Auth\LoginController as AuthLoginController;
 use App\Http\Controllers\Guest\Auth\RegisterController as AuthRegisterController;
+use App\Http\Controllers\KPop\Auth\KPopLoginController as AuthKPopLoginController;
+use App\Http\Controllers\KPop\Auth\KPopRegisterController as AuthKPopRegisterController;
 use App\Http\Controllers\KPopLoginController;
 use App\Http\Controllers\KPopRegisterController;
 use App\Http\Controllers\Media\Auth\LoginController as AuthCloudinaryController;
 use App\Http\Controllers\WelcomeController;
 use App\Http\Middleware\AdminMiddleware;
 
+// ======= Kpop ===
+
+use App\Http\Controllers\KPop\Platform\DashboardController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -65,3 +70,25 @@ Route::group([
 
 Route::get('/{content_slug}/{page?}', ContentListController::class)->where('page', '[0-9]+')->name('content.list');
 Route::post('/{content_slug}/{page?}', ContentListController::class)->where('page', '[0-9]+')->name('content.list');
+
+
+// ========== Kpop ==============
+
+Route::get('/kpop-admin', [AuthKPopLoginController::class, 'showLoginForm'])->name('kpop-admin.login');
+Route::post('/kpop-admin', [AuthKPopLoginController::class, 'login']);
+Route::group([
+    'prefix'        => '/kpop-admin',
+    'middleware'    => ['auth:kpop'],
+    'as'            => 'kpop-admin.',
+    ],function () {
+
+    // dd('This is the admin route');
+    // Login
+
+   
+    // Routes for KPop idols registration
+    Route::get('/register', [AuthKPopRegisterController::class, 'showRegistrationForm'])->name('register');
+    Route::post('/register', [AuthKPopRegisterController::class, 'register']);
+
+    Route::get('/dashboard',[DashboardController::class,'show'])->name('kpop.dashboard');
+});

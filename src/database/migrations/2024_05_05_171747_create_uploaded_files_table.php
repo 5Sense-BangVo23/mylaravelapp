@@ -11,13 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('uploaded_files', function (Blueprint $table) {
-            $table->id();
-            $table->string('file_name');
-            $table->string('public_id');
-            $table->string('url');
-            $table->timestamps();
-        });
+        if (!Schema::hasTable('uploaded_files')) {
+            Schema::create('uploaded_files', function (Blueprint $table) {
+                $table->id();
+                $table->string('file_name');
+                $table->string('public_id');
+                $table->string('url');
+                $table->timestamps();
+            });
+        }
     }
 
     /**

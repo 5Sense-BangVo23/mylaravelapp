@@ -22,8 +22,8 @@
     <header> 
         <h1>{{ $title }}</h1>   
      
-        @if (Auth::guard('kpop-admin')->check())
-            <p>Welcome, {{ Auth::guard('kpop-admin')->user()->name }}</p>
+        @if (Auth::guard('kpop')->check())
+            <p>Welcome, {{ Auth::guard('kpop')->user()->name }}</p>
             <form method="POST" action="{{ route('kpop.logout') }}">
                 @csrf
                 <button type="submit">Logout</button>

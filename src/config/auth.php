@@ -44,7 +44,7 @@ return [
         //     'driver' => 'session',
         //     'provider' => 'admins',
         // ],
-        'kpop-admin' => [
+        'kpop' => [
             'driver' => 'session',
             'provider' => 'kpop_admins',
         ],
@@ -115,6 +115,12 @@ return [
             'expire' => 60,
             'throttle' => 60,
         ],
+        'kpop_admins' =>[
+            'provider' => 'kpop_admins',
+            'table' => 'password_reset_tokens',
+            'expire' => 60,
+            'throttle' => 60,
+        ]
     ],
 
     /*

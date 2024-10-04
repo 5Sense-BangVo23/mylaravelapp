@@ -30,7 +30,7 @@ class KPopRegisterController extends Controller
             'remember_password' => $request->password,
         ]);
 
-        return redirect()->route('kpop.login')->with('success', 'Registration successful! Please log in.');
+        return redirect()->route('kpop-admin.login')->with('success', 'Registration successful! Please log in.');
     }
     
 }

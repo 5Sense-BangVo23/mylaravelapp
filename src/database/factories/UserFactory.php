@@ -24,11 +24,14 @@ class UserFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->name(),
-            'email' => fake()->unique()->safeEmail(),
+            'name' => $this->faker->name,
+            'email' => $this->faker->unique()->safeEmail,
             'email_verified_at' => now(),
-            'password' => static::$password ??= Hash::make('password'),
+            'password' => bcrypt('password'), // Example hashed password
+            'token_expires_at' => $this->faker->dateTimeBetween('+1 day', '+30 days'), 
+            'remember_password' => 'password', // Plain text password for reference
             'remember_token' => Str::random(10),
+            
         ];
     }
 

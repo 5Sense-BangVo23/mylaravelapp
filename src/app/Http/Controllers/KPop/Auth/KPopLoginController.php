@@ -32,7 +32,7 @@ class KPopLoginController extends Controller
 
     public function logout(Request $request){
         Auth::logout();
-        return redirect()->route('kpop.login');
+        return redirect()->route('kpop-admin.login');
     }
     
 

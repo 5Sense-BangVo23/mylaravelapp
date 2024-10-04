@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome to Our Platform</title>
+    <title>Logout Notification</title>
     <style>
         /* Reset styles */
         body, html {
@@ -63,6 +63,18 @@
             margin: 0;
         }
 
+        /* Button styles */
+        .button {
+            display: inline-block;
+            margin: 20px 0;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #3498db;
+            border-radius: 8px;
+            text-decoration: none;
+        }
+
         /* Responsive styles */
         @media only screen and (max-width: 600px) {
             .container {
@@ -86,13 +98,14 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>Welcome, {{ $name }}!</h1>
+            <h1>Goodbye, {{ $name }}!</h1>
         </div>
         <div class="content">
-            <p>Thank you for registering at our platform. We are thrilled to have you with us.</p>
+            <p>You have successfully logged out from your account on {{ $logoutTime }}.</p>
+            <p>For security reasons, please remember to log out when you're done.</p>
         </div>
         <div class="footer">
-            <p>If you have any questions, feel free to contact us at support@example.com.</p>
+            <p>This email was sent to {{ $email }}. If you received this email by mistake, please ignore it.</p>
         </div>
     </div>
 </body>
