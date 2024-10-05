@@ -44,11 +44,10 @@ return [
         //     'driver' => 'session',
         //     'provider' => 'admins',
         // ],
-        'kpop-admin' => [
+        'kpop' => [
             'driver' => 'session',
-            'provider' => 'kpop_admins',
+            'provider' => 'kpop_accounts',
         ],
-        
     ],
 
     /*
@@ -78,15 +77,10 @@ return [
         //     'driver' => 'database',
         //     'table' => 'users',
         // ],
-        // 'admins' => [
-        //     'driver' => 'eloquent',
-        //     'model' => App\Models\KPopAdmin::class,
-        // ],
-        'kpop_admins' => [
+        'kpop_accounts' => [
             'driver' => 'eloquent',
-            'model' => App\Models\KPopAdmin::class, // Replace this with your actual model class
+            'model' => App\Models\KpopAccount::class,
         ],
-
     ],
 
     /*

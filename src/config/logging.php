@@ -64,7 +64,13 @@ return [
             'level' => env('LOG_LEVEL', 'debug'),
             'replace_placeholders' => true,
         ],
-
+        'single' => [
+            'driver' => 'single',
+            'tap' => [App\Logging\CustomizeFormatter::class],
+            'path' => storage_path('logs/laravel-' . date('Y_m_d') . '.log'),
+            'level' => env('LOG_LEVEL', 'debug'),
+            'permission' => 0666,
+        ],
         'daily' => [
             'driver' => 'daily',
             'path' => storage_path('logs/laravel.log'),

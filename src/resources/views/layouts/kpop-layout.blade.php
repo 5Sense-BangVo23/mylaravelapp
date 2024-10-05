@@ -8,6 +8,7 @@
         'head' => $head ?? null,
         'meta' => $meta ?? null,
     ])
+
 </head>
 <body>
     <div>

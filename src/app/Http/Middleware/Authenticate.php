@@ -2,8 +2,10 @@
 
 namespace App\Http\Middleware;
 
+use Closure;
 use Illuminate\Auth\Middleware\Authenticate as Middleware;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class Authenticate extends Middleware
 {
@@ -12,6 +14,12 @@ class Authenticate extends Middleware
      */
     protected function redirectTo(Request $request): ?string
     {
-        return $request->expectsJson() ? null : route('login');
+        if (! $request->expectsJson()) {
+            if (in_array('auth:kpop', $request->route()->middleware())) {
+                return route('kpop.login');
+            }
+            return route('kpop.login');
+        }
     }
+
 }

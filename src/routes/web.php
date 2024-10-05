@@ -6,11 +6,20 @@ use App\Http\Controllers\CloudinaryController;
 use App\Http\Controllers\ContentListController;
 use App\Http\Controllers\Guest\Auth\LoginController as AuthLoginController;
 use App\Http\Controllers\Guest\Auth\RegisterController as AuthRegisterController;
+use App\Http\Controllers\KPop\Auth\KPopLoginController as AuthKPopLoginController;
+use App\Http\Controllers\KPop\Auth\KPopRegisterController as AuthKPopRegisterController;
 use App\Http\Controllers\KPopLoginController;
 use App\Http\Controllers\KPopRegisterController;
 use App\Http\Controllers\Media\Auth\LoginController as AuthCloudinaryController;
 use App\Http\Controllers\WelcomeController;
 use App\Http\Middleware\AdminMiddleware;
+
+// ======= Kpop ===
+
+use App\Http\Controllers\KPop\Platform\DashboardController;
+use App\Http\Controllers\KpopAuthController;
+use App\Http\Controllers\KpopDashboardController;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,10 +32,20 @@ use App\Http\Middleware\AdminMiddleware;
 |
 */
 
+Route::get('/kpop', [KpopAuthController::class, 'loginForm'])->name('kpop.login');
+Route::post('/kpop', [KpopAuthController::class, 'postLogin'])->name('kpop.post.login');
+
+Route::group([
+    'prefix'        => '/kpop',
+    'middleware'    => ['auth:kpop'],
+    'as'            => 'kpop.',
+], function () {
+    Route::get('/dashboard', [KpopDashboardController::class, 'dashboard'])->name('dashboard');
+    Route::post('/logout', [KpopDashboardController::class, 'logout'])->name('logout');
+});
 
 // Routes for admin authentication
 Route::prefix('admin')->group(function () {
-   
     // Routes for cloudinary functionality (protected by admin authentication)
     Route::middleware(['admin'])->group(function () {
         // Route to show the upload form
@@ -65,3 +84,5 @@ Route::group([
 
 Route::get('/{content_slug}/{page?}', ContentListController::class)->where('page', '[0-9]+')->name('content.list');
 Route::post('/{content_slug}/{page?}', ContentListController::class)->where('page', '[0-9]+')->name('content.list');
+
+
