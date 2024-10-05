@@ -44,10 +44,6 @@ return [
         //     'driver' => 'session',
         //     'provider' => 'admins',
         // ],
-        'kpop' => [
-            'driver' => 'session',
-            'provider' => 'kpop_admins',
-        ],
         
     ],
 
@@ -78,15 +74,6 @@ return [
         //     'driver' => 'database',
         //     'table' => 'users',
         // ],
-        // 'admins' => [
-        //     'driver' => 'eloquent',
-        //     'model' => App\Models\KPopAdmin::class,
-        // ],
-        'kpop_admins' => [
-            'driver' => 'eloquent',
-            'model' => App\Models\KPopAdmin::class, // Replace this with your actual model class
-        ],
-
     ],
 
     /*
@@ -115,12 +102,6 @@ return [
             'expire' => 60,
             'throttle' => 60,
         ],
-        'kpop_admins' =>[
-            'provider' => 'kpop_admins',
-            'table' => 'password_reset_tokens',
-            'expire' => 60,
-            'throttle' => 60,
-        ]
     ],
 
     /*

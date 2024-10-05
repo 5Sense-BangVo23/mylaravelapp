@@ -17,6 +17,8 @@ use App\Http\Middleware\AdminMiddleware;
 // ======= Kpop ===
 
 use App\Http\Controllers\KPop\Platform\DashboardController;
+use Illuminate\Support\Facades\Auth;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -27,7 +29,6 @@ use App\Http\Controllers\KPop\Platform\DashboardController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-
 
 // Routes for admin authentication
 Route::prefix('admin')->group(function () {
@@ -72,23 +73,3 @@ Route::get('/{content_slug}/{page?}', ContentListController::class)->where('page
 Route::post('/{content_slug}/{page?}', ContentListController::class)->where('page', '[0-9]+')->name('content.list');
 
 
-// ========== Kpop ==============
-
-Route::get('/kpop-admin', [AuthKPopLoginController::class, 'showLoginForm'])->name('kpop-admin.login');
-Route::post('/kpop-admin', [AuthKPopLoginController::class, 'login']);
-Route::group([
-    'prefix'        => '/kpop-admin',
-    'middleware'    => ['auth:kpop'],
-    'as'            => 'kpop-admin.',
-    ],function () {
-
-    // dd('This is the admin route');
-    // Login
-
-   
-    // Routes for KPop idols registration
-    Route::get('/register', [AuthKPopRegisterController::class, 'showRegistrationForm'])->name('register');
-    Route::post('/register', [AuthKPopRegisterController::class, 'register']);
-
-    Route::get('/dashboard',[DashboardController::class,'show'])->name('kpop.dashboard');
-});
