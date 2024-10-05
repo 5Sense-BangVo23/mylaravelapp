@@ -15,7 +15,10 @@ class Authenticate extends Middleware
     protected function redirectTo(Request $request): ?string
     {
         if (! $request->expectsJson()) {
-            return route('login');
+            if (in_array('auth:kpop', $request->route()->middleware())) {
+                return route('kpop.login');
+            }
+            return route('kpop.login');
         }
     }
 

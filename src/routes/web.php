@@ -17,6 +17,8 @@ use App\Http\Middleware\AdminMiddleware;
 // ======= Kpop ===
 
 use App\Http\Controllers\KPop\Platform\DashboardController;
+use App\Http\Controllers\KpopAuthController;
+use App\Http\Controllers\KpopDashboardController;
 use Illuminate\Support\Facades\Auth;
 
 /*
@@ -30,9 +32,20 @@ use Illuminate\Support\Facades\Auth;
 |
 */
 
+Route::get('/kpop', [KpopAuthController::class, 'loginForm'])->name('kpop.login');
+Route::post('/kpop', [KpopAuthController::class, 'postLogin'])->name('kpop.post.login');
+
+Route::group([
+    'prefix'        => '/kpop',
+    'middleware'    => ['auth:kpop'],
+    'as'            => 'kpop.',
+], function () {
+    Route::get('/dashboard', [KpopDashboardController::class, 'dashboard'])->name('dashboard');
+    Route::post('/logout', [KpopDashboardController::class, 'logout'])->name('logout');
+});
+
 // Routes for admin authentication
 Route::prefix('admin')->group(function () {
-   
     // Routes for cloudinary functionality (protected by admin authentication)
     Route::middleware(['admin'])->group(function () {
         // Route to show the upload form
