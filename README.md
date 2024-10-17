@@ -8,3 +8,6 @@
 
 4. php artisan ...
 
+5. php artisan db:seed --class=
+
+ # "google/apiclient": "^2.17",

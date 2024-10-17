@@ -18,6 +18,7 @@ use App\Http\Middleware\AdminMiddleware;
 
 use App\Http\Controllers\KPop\Platform\DashboardController;
 use App\Http\Controllers\KpopAuthController;
+use App\Http\Controllers\KpopController;
 use App\Http\Controllers\KpopDashboardController;
 use Illuminate\Support\Facades\Auth;
 
@@ -41,7 +42,14 @@ Route::group([
     'as'            => 'kpop.',
 ], function () {
     Route::get('/dashboard', [KpopDashboardController::class, 'dashboard'])->name('dashboard');
-    Route::post('/logout', [KpopDashboardController::class, 'logout'])->name('logout');
+
+    Route::get('/groups', [KpopController::class, 'groups'])->name('groups');
+    Route::get('/members', [KpopController::class, 'members'])->name('members');
+    Route::get('/fanclubs', [KpopController::class, 'fanclubs'])->name('fanclubs');
+    Route::get('/settings', [KpopController::class, 'settings'])->name('settings');
+
+
+    Route::post('/logout', [KpopDashboardController::class, 'logout'])->name('logout');   
 });
 
 // Routes for admin authentication
