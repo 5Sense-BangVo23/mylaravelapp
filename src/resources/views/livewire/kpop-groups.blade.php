@@ -680,6 +680,15 @@
     fill: #333; 
 }
 
+.active {
+    background-color: green; /* Ví dụ màu khi active */
+}
+
+.inactive {
+    background-color: red; /* Ví dụ màu khi inactive */
+}
+
+
 
     </style>
     <script>

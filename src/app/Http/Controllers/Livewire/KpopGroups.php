@@ -166,6 +166,7 @@ class KpopGroups extends Component
     {
         $this->groups = KpopGroup::select(
             'id', 
+            'active',
             'name', 
             'debut_date', 
             'agency', 
