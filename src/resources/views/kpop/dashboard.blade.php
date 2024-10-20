@@ -34,6 +34,7 @@
             <header class="dashboard-header">
                 <h1>Welcome to the Media Management Dashboard</h1>
                 <p>Manage all Kpop media resources efficiently.</p>
+                <img loading="lazy" style="width:100px;height:auto;" src="https://drive.google.com/uc?id=1R4u9EaMXFMtsTlzTVd8Ho3pVDnv3oH2O" alt="Thumbnail" class="thumbnail-image">
             </header>
 
             <!-- Add additional sections here as needed -->

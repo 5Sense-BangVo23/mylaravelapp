@@ -2,44 +2,51 @@
 
 namespace App\Http\Controllers\Livewire;
 
-use Livewire\Component;
 use App\Models\KpopGroup;
+use App\Services\GoogleDriveService;
+use Livewire\Component;
 use Livewire\WithFileUploads;
+use Exception;
 
 class KpopGroups extends Component
 {
     use WithFileUploads;
-
+    const RENDER_DATA_FIELDS = [
+        'id',
+        'active',
+        'name', 
+        'debut_date', 
+        'agency',
+        'cover_image',
+        'profile_image',
+        'thumbnails'
+    ];
     public $groups, $group_id, $name, $debut_date, $cover_image, $profile_image, $agency;
-    public $thumbnails = []; // This will store both uploaded and saved thumbnails
+    public $thumbnails = [];
     public $isOpen = false;
+    public $formSubmitted = false;
     public $isDetailOpen = false;
     public $detailGroup;
     public $closeButtonColor = 'text-gray-800';
-    public $formSubmitted = false;
+    protected $googleDriveService;
+    
+    public function __construct()
+    {
+        $this->googleDriveService = new GoogleDriveService();
+    }
 
     public function mount()
     {
-        $groups = KpopGroup::where('active', true)
-            ->select('id', 'name')
-            ->cursor(); 
-    
-        $this->groups = [];
-        foreach ($groups as $group) {
-            $this->groups[] = $group;
-        }
+        $this->groups = KpopGroup::with('googleDriveFiles')->select('id', 'active', 'name', 'debut_date', 'agency')->get();
+        $this->isDetailOpen = false; 
     }
-    
-    
-    
 
     public function rules()
     {
         return [
             'thumbnails.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'cover_image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048', 
-            'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', 
-           
+            'cover_image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ];
     }
 
@@ -56,81 +63,72 @@ class KpopGroups extends Component
         $this->name = $group->name;
         $this->debut_date = $group->debut_date;
         $this->agency = $group->agency;
-    
-        // Load stored images
-        $this->cover_image = $group->cover_image ? config('app.asset_function')('uploads/' . $group->cover_image) : null;
-        $this->profile_image = $group->profile_image ? config('app.asset_function')('uploads/' . $group->profile_image) : null;
-    
-        // For thumbnails, decode JSON and store the paths (if any)
+        $this->cover_image = $group->cover_image;
+        $this->profile_image = $group->profile_image;
         $this->thumbnails = json_decode($group->thumbnails, true) ?? [];
-    
         $this->isOpen = true;
+    }
+
+    public function viewDetail($id)
+    {
+        $this->detailGroup = KpopGroup::with('googleDriveFiles')->findOrFail($id);
+        $this->isDetailOpen = true;
+    }
+
+    public function closeDetail()
+    {
+        $this->isDetailOpen = false;
     }
 
     public function save()
     {
         $group = $this->group_id ? KpopGroup::findOrFail($this->group_id) : new KpopGroup;
-
         $group->name = $this->name;
         $group->debut_date = $this->debut_date;
         $group->agency = $this->agency;
 
-        // Chỉ xác thực khi có giá trị từ người dùng
-        $rules = [
+        $this->validate([
             'name' => 'required|string',
             'debut_date' => 'required|date',
             'agency' => 'required|string',
-            'thumbnails.*' => 'nullable|image',
-            // 'cover_image' => 'nullable|image',
-            // 'profile_image' => 'nullable|image',
-        ];
-
-        // Xác thực profile_image chỉ khi người dùng đã tải lên hình ảnh mới
-        if ($this->profile_image instanceof \Illuminate\Http\UploadedFile) {
-            $rules['profile_image'] = 'image';
-        }
-
-        $this->validate($rules);
+        ]);
 
         if ($this->cover_image instanceof \Illuminate\Http\UploadedFile) {
-            $cover_image_path = $this->cover_image->store('cover','public');
-            $group->cover_image = $cover_image_path;
+            $googleDriveFile_cover = $this->googleDriveService->uploadFile($this->cover_image, $group->id, 'cover_file');
+            if ($googleDriveFile_cover) {
+                $group->cover_image = $googleDriveFile_cover->google_drive_url;
+            }
         }
 
-        // Handle profile image upload
         if ($this->profile_image instanceof \Illuminate\Http\UploadedFile) {
-            $profile_image_path = $this->profile_image->store('profile_image','public');
-            $group->profile_image = $profile_image_path;
+            $googleDriveFile_profile = $this->googleDriveService->uploadFile($this->profile_image, $group->id, 'profile_file');
+            if ($googleDriveFile_profile) {
+                $group->profile_image = $googleDriveFile_profile->google_drive_url;
+            }
         }
 
-        // Save the group before handling thumbnails
-        $group->save();
-
-        // Handle thumbnails upload (new ones)
         if (is_array($this->thumbnails)) {
-            $thumbnailPaths = $this->uploadThumbnails();
-
-            // Merge new thumbnails with existing ones
+            $thumbnailPaths = $this->uploadThumbnails($group->id);
             $existingThumbnails = json_decode($group->thumbnails, true) ?? [];
             $group->thumbnails = json_encode(array_merge($existingThumbnails, $thumbnailPaths));
-
-            // Save the group again to store updated thumbnails
-            $group->save();
         }
 
+        $group->save();
         $this->resetInput();
         $this->closeModal();
         $this->emit('groupUpdated');
         $this->formSubmitted = true;
     }
 
-
-    public function uploadThumbnails()
+    public function uploadThumbnails($group_id)
     {
         $paths = [];
         foreach ($this->thumbnails as $thumbnail) {
             if ($thumbnail instanceof \Illuminate\Http\UploadedFile) {
-                $paths[] = $thumbnail->store('thumbnails', 'public');
+                $googleDriveFile_thumbnail = $this->googleDriveService->uploadFile($thumbnail, $group_id, 'thumbnails_file');
+                if ($googleDriveFile_thumbnail) {
+                    $paths[] = $googleDriveFile_thumbnail->google_drive_url;
+                }
             }
         }
         return $paths;
@@ -139,13 +137,17 @@ class KpopGroups extends Component
     public function toggleActive($groupId)
     {
         $group = KpopGroup::find($groupId);
-
         if ($group) {
             $group->active = !$group->active;
             $group->save();
         }
     }
 
+    public function toggleDetail()
+    {
+        $this->isDetailOpen = !$this->isDetailOpen; 
+        $this->dispatchBrowserEvent('toggleSidebar');
+    }
 
     public function closeModal()
     {
@@ -159,22 +161,14 @@ class KpopGroups extends Component
         $this->agency = '';
         $this->cover_image = null;
         $this->profile_image = null;
-        $this->thumbnails = []; // Clear out the thumbnails
+        $this->thumbnails = [];
     }
 
     public function render()
     {
-        $this->groups = KpopGroup::select(
-            'id', 
-            'active',
-            'name', 
-            'debut_date', 
-            'agency', 
-            'cover_image',
-            'profile_image',
-            'thumbnails'
+        $this->groups = KpopGroup::with('googleDriveFiles')->select(
+            self::RENDER_DATA_FIELDS
         )->get();
-
         return view('livewire.kpop-groups');
     }
 }

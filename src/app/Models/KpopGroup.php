@@ -9,7 +9,17 @@ class KpopGroup extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name','active', 'debut_date', 'agency','thumbnails','cover_image','profile_image' ,'description', 'genre'];
+    protected $fillable = [
+        'name', 
+        'active', 
+        'debut_date', 
+        'agency', 
+        'thumbnails', 
+        'cover_image', 
+        'profile_image', 
+        'description', 
+        'genre'
+    ];
 
     public function members()
     {
@@ -45,4 +55,10 @@ class KpopGroup extends Model
     {
         return $this->hasMany(KpopCollaboration::class);
     }
+
+    public function googleDriveFiles()
+    {
+        return $this->hasMany(GoogleDriveFile::class, 'kpop_group_id');
+    }
+
 }

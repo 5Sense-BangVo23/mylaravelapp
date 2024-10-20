@@ -30,16 +30,17 @@
                                 @endif
                             </button>
                         </div>
-                        
-                        
+
                         @if($group->cover_image)
-                            <img src="{{ config('app.asset_function')('uploads/' . $group->cover_image) }}" alt="Cover Image" class="cover-image">
+                            <img src="{{ $group->cover_image }}" alt="Cover Image" class="cover-image">
                         @endif
                     </div>
                     <div class="card-body">
+                        
                         @if($group->profile_image)
-                            <img src="{{ config('app.asset_function')('uploads/' . $group->profile_image) }}" alt="Profile Image" class="profile-image">
+                            <img src="{{ $group->profile_image }}" alt="Profile Image" class="profile-image">
                         @endif
+                        
                         <div class="group-details">
                             <h2 class="group-title">{{ $group->name }}</h2>
                             <div class="detail-item">
@@ -55,33 +56,49 @@
                                 <span class="detail">{{ $group->agency }}</span>
                             </div>
                         </div>
-                                                                  
-                        @if($group->thumbnails)
-                        @php
-                            // Decode the thumbnails from JSON
-                            $thumbnails = json_decode($group->thumbnails, true);
-                        @endphp
-                    
-                        @if(is_array($thumbnails) && count($thumbnails) > 0)
-                        <div class="carousel-container" data-card-id="{{ $group->id }}">
-                            <div class="carousel-wrapper">
-                                <div class="carousel-thumbnails">
-                                    @foreach($thumbnails as $thumbnail)
-                                        <div class="thumbnail-slide">
-                                            <img loading="lazy" style="width:100px;height:auto;" src="{{ config('app.asset_function')('uploads/' . $thumbnail) }}" alt="Thumbnail" class="thumbnail-image">
-                                        </div>
-                                    @endforeach
+                        <div class="members-list">
+                            <h3>Members:</h3>
+                            <button onclick="toggleMembers({{ $group->id }}, this)" class="btn btn-show-members">Show Members</button>
+                            <div class="members-container" id="members-container-{{ $group->id }}" style="display: none;">
+                                <div class="slider-wrapper">
+                                    <button onclick="goToPrev({{ $group->id }})" class="btn btn-prev">Prev</button>
+                                    <div class="member-cards" id="auto-slider-{{ $group->id }}">
+                                        @foreach($group->members as $member)
+                                            <div class="member-card">
+                                                <h4 class="member-name">{{ $member->name }}</h4>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                    <button onclick="goToNext({{ $group->id }})" class="btn btn-next">Next</button>
                                 </div>
                             </div>
-                            <!-- Previous/Next controls -->
-                            <button class="prev-slide" onclick="moveSlide(-1, {{ $group->id }})">&#10094;</button>
-                            <button class="next-slide" onclick="moveSlide(1, {{ $group->id }})">&#10095;</button>
                         </div>
                         
+                                                            
+                        @if($group->thumbnails)
+                            @php
+                                // Decode the thumbnails from JSON
+                                $thumbnails = json_decode($group->thumbnails, true);
+                            @endphp
+
+                            @if(is_array($thumbnails) && count($thumbnails) > 0)
+                                <div class="carousel-container" data-card-id="{{ $group->id }}">
+                                    <div class="carousel-wrapper">
+                                        <div class="carousel-thumbnails">
+                                            @foreach($thumbnails as $thumbnail)
+                                                <div class="thumbnail-slide">
+                                                    <img loading="lazy" style="width:100px;height:auto;" src="{{ $thumbnail }}" alt="Thumbnail" class="thumbnail-image">
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                    <!-- Previous/Next controls -->
+                                    <button class="prev-slide" onclick="moveSlide(-1, {{ $group->id }})">&#10094;</button>
+                                    <button class="next-slide" onclick="moveSlide(1, {{ $group->id }})">&#10095;</button>
+                                </div>
+                            @endif
                         @endif
-                    @endif
-                    
-                    
+
                     </div>
                     <div class="card-footer">
                         <button wire:click="edit({{ $group->id }})" class="btn btn-edit">Edit</button>
@@ -89,9 +106,7 @@
                     </div>
                 </div>
             @endforeach
-            
         </div>
-        
 
         <!-- Sidebar for Group Details -->
         <div class="sidebar" style="{{ $isDetailOpen ? 'display:block;' : 'display:none;' }}">
@@ -105,14 +120,12 @@
                         <p><strong>Group ID:</strong> <span>{{ $detailGroup->id }}</span></p>
                         <p><strong>Debut Date:</strong> <span>{{ \Carbon\Carbon::parse($detailGroup->debut_date)->format('d M Y') }}</span></p>
                         <p><strong>Agency:</strong> <span>{{ $detailGroup->agency }}</span></p>
-                    </div>
+                    </div>    
                 @else
-                    <p>No details available.</p>
+                    <p class="no-details">No details available.</p>
                 @endif
             </div>
         </div>
-        
-
         <!-- Modal for Add/Edit Group -->
         <div class="modal" style="{{ $isOpen ? 'display:block;' : 'display:none;' }}">
             <div class="modal-content">
@@ -141,7 +154,7 @@
                                     @if($thumbnail instanceof \Illuminate\Http\UploadedFile)
                                         <img style="width:100px;height:auto;" src="{{ $thumbnail->temporaryUrl() }}" alt="Thumbnail" class="uploaded-thumbnail" />
                                     @else
-                                        <img style="width:100px;height:auto;" src="{{ config('app.asset_function')('uploads/' . $thumbnail) }}" alt="Thumbnail" class="uploaded-thumbnail" />
+                                        <img style="width:100px;height:auto;" src="{{  $thumbnail }}" alt="Thumbnail" class="uploaded-thumbnail" />
                                     @endif
                                 @endforeach
                             </div>
@@ -282,29 +295,29 @@
         }
     
         .modal {
-            display: none; /* Default hidden, controlled by inline style */
+            display: none;
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0, 0, 0, 0.7); /* Dark semi-transparent background */
+            background: rgba(0, 0, 0, 0.7);
             z-index: 1000;
-            display: flex; /* Use flexbox to center content */
-            justify-content: center; /* Center horizontally */
-            align-items: center; /* Center vertically */
-            transition: opacity 0.3s ease; /* Smooth opacity transition */
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            transition: opacity 0.3s ease;
         }
     
         .modal-content {
-            background: #fff; /* White background for the modal */
-            border-radius: 8px; /* Rounded corners */
+            background: #fff;
+            border-radius: 8px;
             padding: 20px;
-            width: 500px; /* Increased width for better layout */
-            margin: 100px auto; /* Center the modal */
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
-            position: relative; /* Positioning for the close button */
-            animation: slide-down 0.3s ease; /* Slide down animation */
+            width: 500px; 
+            margin: 100px auto; 
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1); 
+            position: relative; 
+            animation: slide-down 0.3s ease; 
             overflow-y: auto;
             height: 500px;
         }
@@ -320,109 +333,102 @@
             }
         }
 
-        /* Bố cục tổng thể cho phần hiển thị */
-.group-details {
-    background-color: #ffffff; /* Màu nền trắng để nổi bật */
-    padding: 15px 20px; /* Padding xung quanh, tạo không gian thoáng */
-    border-radius: 8px; /* Bo tròn các góc */
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); /* Đổ bóng nhẹ nhàng */
-    max-width: 450px; /* Giới hạn chiều rộng vừa phải */
-    margin: 20px auto; /* Giữa trang */
-    font-family: 'Arial', sans-serif; /* Phông chữ dễ đọc */
-}
+        .group-details {
+            background-color: #ffffff; 
+            padding: 15px 20px; 
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); 
+            max-width: 450px; 
+            margin: 20px auto;
+            font-family: 'Arial', sans-serif; 
+        }
 
-/* Tiêu đề của nhóm */
-.group-title {
-    font-size: 20px; /* Kích thước chữ vừa phải */
-    font-weight: 600; /* Chữ nửa đậm */
-    color: #333333; /* Màu chữ đậm */
-    margin-bottom: 10px; /* Khoảng cách dưới tiêu đề */
-    text-align: center; /* Căn giữa tiêu đề */
-}
+        .group-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #333333;
+            margin-bottom: 10px;
+            text-align: center; 
+        }
 
-/* Căn chỉnh cho từng mục chi tiết */
-.detail-item {
-    margin-bottom: 10px; /* Khoảng cách dưới mỗi mục */
-    display: flex; /* Sử dụng Flexbox */
-    align-items: center; /* Căn giữa theo chiều dọc */
-    font-size: 11px;
-}
+        .detail-item {
+            margin-bottom: 10px; 
+            display: flex; 
+            align-items: center; 
+            font-size: 11px;
+        }
 
-/* Định dạng văn bản cho tiêu đề chi tiết */
-.detail-item strong {
-    color: #555555; /* Màu chữ cho tiêu đề chi tiết */
-    font-weight: bold; /* Chữ bình thường */
-    flex: 0 0 60px; /* Đặt chiều rộng cố định cho tiêu đề */
-    text-align: left; /* Căn trái cho tiêu đề */
-}
-.detail-item span{
-    color: #bc4200e9;
-    font-weight: bold;
-    cursor: pointer;
-}
+        .detail-item strong {
+            color: #555555;
+            font-weight: bold; 
+            flex: 0 0 60px; 
+            text-align: left;
+        }
+        .detail-item span{
+            color: #bc4200e9;
+            font-weight: bold;
+            cursor: pointer;
+        }
 
-.detail-item span:hover{
-    color: #0068bc;
-    text-decoration: underline;
-}
-/* Định dạng văn bản cho nội dung chi tiết */
-.detail {
-    color: #777777; /* Màu chữ cho nội dung */
-    font-weight: 400; /* Chữ thường */
-    flex: 1; /* Chiếm phần còn lại của không gian */
-    overflow-wrap: break-word; /* Ngăn nội dung quá dài không bị cắt */
-    padding-left: 8px; /* Khoảng cách trái cho nội dung */
-}
+        .detail-item span:hover{
+            color: #0068bc;
+            text-decoration: underline;
+        }
 
-/* Tinh chỉnh cho responsive */
-@media (max-width: 600px) {
-    .group-details {
-        padding: 10px; /* Giảm padding cho thiết bị nhỏ */
-        max-width: 90%; /* Giới hạn chiều rộng cho thiết bị nhỏ */
-    }
-}
+        .detail {
+            color: #777777;
+            font-weight: 400;
+            flex: 1; 
+            overflow-wrap: break-word;
+            padding-left: 8px; 
+        }
 
 
-        
-    
+        @media (max-width: 600px) {
+            .group-details {
+                padding: 10px; 
+                max-width: 90%;
+            }
+        }
+
         .modal-title {
-            font-size: 1.5rem; /* Title size */
-            margin-bottom: 15px; /* Spacing below the title */
-            color: #333; /* Dark color for the title */
+            font-size: 1.5rem; 
+            margin-bottom: 15px; 
+            color: #333;
         }
     
         input[type="text"],
         input[type="date"],
         input[type="file"] {
-            width: 100%; /* Full width inputs */
-            padding: 10px; /* Padding for comfort */
-            margin: 10px 0; /* Space between inputs */
-            border: 1px solid #ccc; /* Light border */
-            border-radius: 5px; /* Rounded edges for inputs */
-            transition: border-color 0.3s; /* Smooth border color transition */
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0; 
+            border: 1px solid #ccc; 
+            border-radius: 5px; 
+            transition: border-color 0.3s; 
         }
     
         input[type="text"]:focus,
         input[type="date"]:focus,
         input[type="file"]:focus {
-            border-color: #007bff; /* Highlight border on focus */
-            outline: none; /* Remove default outline */
+            border-color: #007bff; 
+            outline: none; 
         }
     
         .btn-save {
-            width: 100%; /* Full width button */
-            padding: 10px; /* Padding for button */
-            background: #007bff; /* Blue background */
-            color: #fff; /* White text */
-            border: none; /* No border */
-            border-radius: 5px; /* Rounded button */
-            font-size: 1rem; /* Font size */
-            cursor: pointer; /* Pointer cursor on hover */
-            transition: background 0.3s; /* Smooth background transition */
+            width: 100%; 
+            padding: 10px;
+            background: #007bff; 
+            color: #fff; 
+            border: none;
+            border-radius: 5px; 
+            font-size: 1rem;
+            cursor: pointer; 
+            transition: background 0.3s;
         }
     
         .btn-save:hover {
-            background: #0056b3; /* Darker blue on hover */
+            background: #0056b3;
         }
     
         .close {
@@ -431,6 +437,7 @@
             content: unset !important;
             font-size: 25px;
             cursor: pointer;
+            z-index: 1000;
         }
     
         .card-grid {
@@ -455,7 +462,7 @@
         .card-header {
             padding: 15px;
             background-color: #f2f2f2;
-            border-bottom: 1px solid #ddd; /* Added border for separation */
+            border-bottom: 1px solid #ddd;
         }
     
         .card-body {
@@ -466,272 +473,466 @@
         .card-footer {
             padding: 15px;
             text-align: right;
-            background-color: #f2f2f2; /* Added background for consistency */
+            background-color: #f2f2f2;
         }
-    
+
+        /* ================ Detail ================ */
         .sidebar {
-            display: none; /* Default to hidden, controlled by inline style */
+            display: none; 
             position: fixed;
             top: 0;
             right: 0;
-            width: 400px;
-            height: 100%;
-            background-color: #ffffff;
-            box-shadow: -2px 0 5px rgba(0, 0, 0, 0.5);
+            width: 50%; 
+            height: 100%; 
+            background-color: #ffffff; 
+            box-shadow: -4px 0 15px rgba(0, 0, 0, 0.2);
             z-index: 1000;
-            padding: 20px;
-            overflow-y: auto; /* Allow scrolling if content overflows */
-            transition: transform 0.3s ease-in-out;
+            padding: 30px; 
+            overflow-y: auto; 
+            transition: transform 0.4s ease; 
+            border-left: 0px solid #3f3f3f; 
+            border-radius: 0 10px 10px 0; 
         }
-    
+
         .sidebar-content {
             position: relative;
         }
-    
+
         .sidebar-title {
-            font-size: 1.5rem;
+            font-size: 2.5rem;
             margin-bottom: 20px;
-            color: #444;
+            color: #333;
+            font-weight: 700;
+            text-transform: uppercase;
+            position: relative;
+            padding-bottom: 10px;
+            letter-spacing: 1.5px;
+            transition: color 0.4s ease, transform 0.4s ease;
         }
-    
+
+        .sidebar-title::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            height: 5px;
+            background-color: #007bff;
+            transform: scaleX(0);
+            transition: transform 0.4s ease;
+        }
+
+        .sidebar-title:hover {
+            color: #0056b3;
+            transform: translateY(-2px);
+        }
+
+        .sidebar-title:hover::after {
+            transform: scaleX(1);
+        }
+
+
+        .close {
+            font-size: 2.5rem;
+            cursor: pointer;
+            color: #4f4c4c;
+            position: absolute;
+            top: 0px;
+            right: 20px;
+            transition: color 0.3s;
+        }
+
+        .close:hover {
+            color: #2f2c2c;
+        }
+
         .detail-info {
-            padding: 10px 0;
-            border-top: 1px solid #eee;
-            margin-top: 10px;
+            padding: 20px; 
+            margin-top: 20px; 
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s; 
         }
-    
+
+        .detail-info:hover {
+            transform: scale(1.02); 
+        }
+
         .detail-info p {
-            margin: 10px 0;
+            margin: 10px 0; 
+            font-size: 1.1rem; 
+            line-height: 1.6; 
+            color: #555; 
         }
-    
+
         .detail-info strong {
-            color: #555;
+            color: #007bff; 
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px; 
         }
-    
+
         .detail-info span {
             color: #333;
-            font-weight: normal;
+            font-weight: normal; 
+            background-color: #e9ecef;
+            border-radius: 4px;
+            padding: 3px 6px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
         }
-    
-        /* Styles for thumbnail, cover, and profile images */
+
+        @media (max-width: 600px) {
+            .sidebar {
+                width: 100%;
+                padding: 15px; 
+            }
+
+            .sidebar-title {
+                font-size: 1.5rem; 
+            }
+        }
+    /* ================ Detail ================ */
         .image-container {
             display: flex;
             flex-direction: column;
             align-items: center;
-            margin-bottom: 15px; /* Space between image containers */
+            margin-bottom: 15px; 
         }
     
         .cover-image, .thumbnail-image {
-            width: 100%; /* Full width for cover and thumbnail images */
-            height: auto; /* Maintain aspect ratio */
-            border-radius: 8px; /* Rounded corners */
+            width: 100%;
+            height: auto; 
+            border-radius: 8px;
         }
     
         .profile-image {
-            width: 80px; /* Set a fixed width for profile images */
-            height: 80px; /* Set a fixed height for profile images */
-            border-radius: 50%; /* Circular profile image */
-            object-fit: cover; /* Maintain aspect ratio */
-            margin-bottom: 10px; /* Spacing below profile image */
+            width: 80px; 
+            height: 80px; 
+            border-radius: 50%;
+            object-fit: cover; 
+            margin-bottom: 10px; 
         }
     
         .upload-label {
             font-weight: bold;
             margin: 10px 0;
-            display: block; /* Make label block-level for better spacing */
+            display: block;
         }
     
         input[type="file"] {
-            border: 1px dashed #ccc; /* Dashed border for file inputs */
-            padding: 10px; /* Padding for file inputs */
-            margin: 10px 0; /* Space around file inputs */
-            background: #f9f9f9; /* Light background for better visibility */
-            cursor: pointer; /* Pointer cursor on hover */
+            border: 1px dashed #ccc; 
+            padding: 10px; 
+            margin: 10px 0;
+            background: #f9f9f9; 
+            cursor: pointer;
         }
     
         .file-upload-container {
-            margin: 10px 0; /* Margin for spacing */
-            padding: 10px; /* Padding for container */
-            border: 1px solid #ccc; /* Border for container */
-            border-radius: 5px; /* Rounded corners */
-            background-color: #fff; /* Background color for better visibility */
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ccc; 
+            border-radius: 5px;
+            background-color: #fff; 
         }
     
         .error {
-            color: red; /* Red color for error messages */
-            font-size: 0.9rem; /* Smaller font for error messages */
+            color: red; 
+            font-size: 0.9rem; 
         }
 
         /* ------------- Slide -------------- */
         .carousel-container {
-    position: relative;
-    max-width: 100%;
-    overflow: hidden;
-    margin: auto;
-}
+            position: relative;
+            max-width: 100%;
+            overflow: hidden;
+            margin: 20px auto;
+        }
 
-.carousel-wrapper {
-    display: flex;
-    align-items: center;
-}
+        .carousel-wrapper {
+            display: flex;
+            align-items: center;
+        }
 
-.carousel-thumbnails {
-    display: flex;
-    transition: transform 0.5s ease;
-    width: 100%;
-}
+        .carousel-thumbnails {
+            display: flex;
+            transition: transform 0.5s ease;
+            width: 100%;
+        }
 
-.thumbnail-slide {
-    flex: 0 0 auto;
-    margin-right: 10px;
-}
+        .thumbnail-slide {
+            flex: 0 0 auto;
+            margin-right: 10px;
+        }
 
-.thumbnail-image {
-    max-width: 100px;
-    height: auto;
-}
+        .thumbnail-image {
+            max-width: 100px;
+            height: auto;
+        }
 
-.prev-slide, .next-slide {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background-color: rgba(0, 0, 0, 0.5);
-    color: white;
-    border: none;
-    padding: 10px;
-    cursor: pointer;
-}
+        .prev-slide, .next-slide {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+        }
 
-.prev-slide {
-    left: 10px;
-}
+        .prev-slide {
+            left: 10px;
+        }
 
-.next-slide {
-    right: 10px;
-}
+        .next-slide {
+            right: 10px;
+        }
 
-.prev-slide:hover, .next-slide:hover {
-    background-color: rgba(0, 0, 0, 0.8);
-}
-
-
-.spinner {
-    display: none;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 1.5rem;
-    color: #333;
-}
-
-[wire\:loading] .spinner {
-    display: block;
-}
-
-/* Bố cục tinh gọn */
-.status-container {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 8px 12px;
-    border-radius: 8px;
-    border: 1px solid #e0e0e0;
-    background-color: #f9f9f9;
-    width: 100%;
-    max-width: 250px;
-    margin: 8px auto;
-}
-
-/* Chỉ báo trạng thái tròn */
-.status-indicator {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    transition: background-color 0.3s ease;
-}
-
-.active {
-    background-color: #4CAF50; /* Màu xanh lá biểu thị trạng thái hoạt động */
-}
-
-.inactive {
-    background-color: #f44336; /* Màu đỏ biểu thị trạng thái không hoạt động */
-}
-
-/* Nút nhỏ gọn với icon */
-.toggle-btn {
-    background-color: transparent;
-    border: none;
-    cursor: pointer;
-    padding: 6px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background-color 0.3s ease;
-}
-
-.toggle-btn:hover {
-    background-color: #e0e0e0;
-}
-
-.toggle-btn svg {
-    fill: #333; 
-}
-
-.active {
-    background-color: green; /* Ví dụ màu khi active */
-}
-
-.inactive {
-    background-color: red; /* Ví dụ màu khi inactive */
-}
+        .prev-slide:hover, .next-slide:hover {
+            background-color: rgba(0, 0, 0, 0.8);
+        }
 
 
+        .spinner {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1.5rem;
+            color: #333;
+        }
 
-    </style>
-    <script>
-        // Object to store currentIndex for each card
-let slideIndexes = {};
+        [wire\:loading] .spinner {
+            display: block;
+        }
 
-// Function to move slide for a specific card
-function moveSlide(step, cardId) {
-    // Get current index for this specific card or initialize it to 0 if not yet defined
-    if (!(cardId in slideIndexes)) {
-        slideIndexes[cardId] = 0;
-    }
+        .status-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 12px;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+            background-color: #f9f9f9;
+            width: 100%;
+            max-width: 250px;
+            margin: 8px auto;
+        }
 
-    const slides = document.querySelector(`.carousel-container[data-card-id="${cardId}"] .carousel-thumbnails`);
-    const slideWidth = document.querySelector(`.carousel-container[data-card-id="${cardId}"] .thumbnail-slide`).clientWidth + 10; // slide width + margin
-    const totalSlides = document.querySelectorAll(`.carousel-container[data-card-id="${cardId}"] .thumbnail-slide`).length;
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            transition: background-color 0.3s ease;
+        }
 
-    // Update the index for this specific card
-    slideIndexes[cardId] += step;
+        .active {
+            background-color: #4CAF50; 
+        }
 
-    // Ensure index is within bounds
-    if (slideIndexes[cardId] < 0) {
-        slideIndexes[cardId] = 0;
-    } else if (slideIndexes[cardId] >= totalSlides) {
-        slideIndexes[cardId] = totalSlides - 1;
-    }
+        .inactive {
+            background-color: #f44336; 
+        }
 
-    slides.style.transform = `translateX(-${slideIndexes[cardId] * slideWidth}px)`;
-}
+        .toggle-btn {
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 6px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s ease;
+        }
+
+        .toggle-btn:hover {
+            background-color: #e0e0e0;
+        }
+
+        .toggle-btn svg {
+            fill: #333; 
+        }
+
+        .active {
+            background-color: green; 
+        }
+
+        .inactive {
+            background-color: red; 
+        }
+
+        .members-container {
+            margin-top: 10px;
+            overflow: hidden; 
+            width: 100%;
+        }
+
+        .slider-wrapper {
+            overflow: hidden; 
+            position: relative;
+            width: 100%;
+        }
+
+        .member-cards {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .member-card {
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 10px;
+            margin-right: 10px;
+            min-width: 150px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .member-name {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #333;
+        }
+
+        </style>
+        <script>
+            let slideIndexes = {};
+            function moveSlide(step, cardId) {
+                if (!(cardId in slideIndexes)) {
+                    slideIndexes[cardId] = 0;
+                }
+                const slides = document.querySelector(`.carousel-container[data-card-id="${cardId}"] .carousel-thumbnails`);
+                const slideWidth = document.querySelector(`.carousel-container[data-card-id="${cardId}"] .thumbnail-slide`).clientWidth + 10; // slide width + margin
+                const totalSlides = document.querySelectorAll(`.carousel-container[data-card-id="${cardId}"] .thumbnail-slide`).length;
+
+                slideIndexes[cardId] += step;
+
+                if (slideIndexes[cardId] < 0) {
+                    slideIndexes[cardId] = 0;
+                } else if (slideIndexes[cardId] >= totalSlides) {
+                    slideIndexes[cardId] = totalSlides - 1;
+                }
+
+                slides.style.transform = `translateX(-${slideIndexes[cardId] * slideWidth}px)`;
+            }
 
 
-document.addEventListener('DOMContentLoaded', function() {
-    const cards = document.querySelectorAll('.card');
+            document.addEventListener('DOMContentLoaded', function() {
+                const cards = document.querySelectorAll('.card');
 
-    cards.forEach(card => {
-        const header = card.querySelector('.card-header');
+                cards.forEach(card => {
+                    const header = card.querySelector('.card-header');
 
-        header.addEventListener('click', function() {
-            const body = card.querySelector('.card-body');
-            body.style.display = body.style.display === 'block' ? 'none' : 'block';
-        });
-    });
-});
+                    header.addEventListener('click', function() {
+                        const body = card.querySelector('.card-body');
+                        body.style.display = body.style.display === 'block' ? 'none' : 'block';
+                    });
+                });
+
+
+            });
+
+
+            document.addEventListener('DOMContentLoaded', function() {
+                window.toggleMembers = function(groupId, button) {
+                    const membersContainer = document.getElementById(`members-container-${groupId}`);
+                    if (membersContainer.style.display === "none") {
+                        membersContainer.style.display = "block";
+                        button.textContent = "Hide Members";
+                    } else {
+                        membersContainer.style.display = "none";
+                        button.textContent = "Show Members";
+                    }
+                }
+
+                let currentSlideIndex = 0;
+
+                function nextSlide(groupId) {
+                    const slider = document.getElementById(`auto-slider-${groupId}`);
+                    const memberCards = slider.children;
+                    const totalSlides = memberCards.length;
+                    currentSlideIndex = (currentSlideIndex + 1) % totalSlides; 
+                    updateSlidePosition(slider, currentSlideIndex, totalSlides);
+                }
+
+                function prevSlide(groupId) {
+                    const slider = document.getElementById(`auto-slider-${groupId}`);
+                    const memberCards = slider.children;
+                    const totalSlides = memberCards.length;
+                    currentSlideIndex = (currentSlideIndex - 1 + totalSlides) % totalSlides; 
+                    updateSlidePosition(slider, currentSlideIndex, totalSlides);
+                }
+
+                function updateSlidePosition(slider, index, total) {
+                    const slideWidth = slider.scrollWidth / total; 
+                    slider.style.transform = `translateX(-${slideWidth * index}px)`; 
+                }
+
+                window.goToNext = function(groupId) {
+                    nextSlide(groupId);
+                };
+
+                window.goToPrev = function(groupId) {
+                    prevSlide(groupId);
+                };
+            });
+
+            document.addEventListener('DOMContentLoaded', function () {
+                Livewire.on('toggleSidebar', function () {
+                    var sidebar = document.querySelector('.sidebar');
+                    sidebar.style.display = sidebar.style.display === 'block' ? 'none' : 'block';
+                });
+            });
+
+
+            window.onload = function () {
+                const memberCards = document.querySelectorAll('.member-card');
+
+                const addClickListener = (card) => {
+                    card.addEventListener('click', function (event) {
+                        console.log('Member card clicked!'); 
+                        const imageUrl = this.dataset.image; 
+                        const name = this.querySelector('h4').innerText;
+                        const role = this.querySelector('p strong + span').innerText;
+                        const age = this.querySelectorAll('p strong + span')[1].innerText;
+
+                        showPopup(event, imageUrl, name, role, age);
+                    });
+                };
+
+                for (let i = 0; i < memberCards.length; i++) {
+                    addClickListener(memberCards[i]);
+                }
+
+                function showPopup(event, imageUrl, name, role, age) {
+                    const memberPopup = document.getElementById('member-popup');
+                    const popupImage = document.getElementById('popup-image');
+                    const popupName = document.getElementById('popup-name');
+                    const popupRole = document.getElementById('popup-role');
+                    const popupAge = document.getElementById('popup-age');
+
+                    popupImage.src = imageUrl; 
+                    popupName.innerText = name; 
+                    popupRole.innerText = role; 
+                    popupAge.innerText = age; 
+
+                    memberPopup.style.display = 'block'; 
+                    memberPopup.style.left = `${event.pageX + 10}px`;
+                    memberPopup.style.top = `${event.pageY + 10}px`;
+
+                    const hidePopup = () => {
+                        memberPopup.style.display = 'none';
+                        document.removeEventListener('click', hidePopup);
+                    };
+
+                    document.addEventListener('click', hidePopup, { once: true });
+                }
+            };
+
 
     </script>
     

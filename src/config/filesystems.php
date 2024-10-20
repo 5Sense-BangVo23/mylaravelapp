@@ -61,6 +61,15 @@ return [
             'visibility' =>'public',
             'url' => env('APP_URL').'/uploads',
         ],
+        'google' =>[
+            'driver' => 'google',
+            'apiKey' => env('GOOGLE_DRIVE_API_KEY'),
+            'clientId' => env('GOOGLE_DRIVE_CLIENT_ID'),
+            'clientSecret' => env('GOOGLE_DRIVE_CLIENT_SECRET'),
+            'refreshToken' => env('GOOGLE_DRIVE_REFRESH_TOKEN'),
+            'folderId' => env('GOOGLE_DRIVE_FOLDER_ID'),
+            'accountEmail' => env('GOOGLE_DRIVE_SERVICE_ACCOUNT_EMAIL'),
+        ]
         
 
     ],
