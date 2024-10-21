@@ -28,6 +28,8 @@ class KpopGroups extends Component
     public $isDetailOpen = false;
     public $detailGroup;
     public $closeButtonColor = 'text-gray-800';
+    public $selectedMember;
+    public $closePopup = false; 
     protected $googleDriveService;
     
     public function __construct()
@@ -153,6 +155,15 @@ class KpopGroups extends Component
     {
         $this->isOpen = false;
     }
+
+    public function openMemberDetail($memberId)
+    {
+        $this->selectedMember = $this->detailGroup->members->find($memberId);
+        $this->closePopup = false; 
+    }
+
+   
+
 
     public function resetInput()
     {

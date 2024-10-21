@@ -120,12 +120,40 @@
                         <p><strong>Group ID:</strong> <span>{{ $detailGroup->id }}</span></p>
                         <p><strong>Debut Date:</strong> <span>{{ \Carbon\Carbon::parse($detailGroup->debut_date)->format('d M Y') }}</span></p>
                         <p><strong>Agency:</strong> <span>{{ $detailGroup->agency }}</span></p>
-                    </div>    
+                    </div>  
+                    <div class="member-list">
+                        <h3 class="members-title">Members</h3>
+                        <div class="member-cards" style="flex-wrap:wrap">
+                            @foreach($detailGroup->members as $member)
+                                <div class="member-card" wire:click="openMemberDetail({{ $member->id }})" style="position: relative;">
+                                    <img src="{{ $member->member_image }}" alt="{{ $member->name }}" class="member-image">
+                                    <p class="singer-name">{{ $member->name }}</p>
+                                    @if($selectedMember && $selectedMember->id == $member->id)
+                                        <div class="member-popup {{ $closePopup ? 'hidden' : '' }}">
+                                            <div class="popup-content" wire:click.stop>
+                                                <span class="close" wire:click="$set('closePopup', true)" style="cursor: pointer;">&times;</span>
+                                                <h3 class="singer-name">{{ $selectedMember->name }}</h3>
+                                                <p><strong>Roles:</strong></p>
+                                                <ul class="roles-list">
+                                                    @foreach ($selectedMember->roles as $role)
+                                                        <li class="role-item">{{ $role }}</li>
+                                                    @endforeach
+                                                </ul>
+
+                                                <p><strong>Sample Text:</strong> Đây là đoạn thông tin mẫu về thành viên này.</p>
+                                            </div>
+                                        </div>
+                                    @endif
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
                 @else
                     <p class="no-details">No details available.</p>
                 @endif
             </div>
         </div>
+        
         <!-- Modal for Add/Edit Group -->
         <div class="modal" style="{{ $isOpen ? 'display:block;' : 'display:none;' }}">
             <div class="modal-content">
@@ -592,6 +620,156 @@
                 font-size: 1.5rem; 
             }
         }
+
+        .member-card {
+            width: 120px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            text-align: center;
+            cursor: pointer;
+            position: relative; /* Đặt vị trí tương đối để popup có thể xuất hiện ngay trên */
+        }
+
+        .member-popup {
+            position: absolute;
+            bottom: 100%; 
+            left: 50%; 
+            transform: translateX(-50%); 
+            background-color: white; 
+            border: 1px solid #ccc;
+            padding: 10px; 
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            z-index: 1000; 
+            border-radius: 5px; 
+            width: 200px; 
+            max-width: 90vw;
+            opacity: 1;
+            visibility: visible; 
+            transition: opacity 0.3s ease, visibility 0.3s ease; 
+        }
+
+        .hidden {
+            opacity: 0; 
+            visibility: hidden;
+            pointer-events: none; 
+        }
+
+
+
+        .popup-content {
+            position: relative;
+        }
+
+        .popup-content .close {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        .popup-content h3 {
+            margin: 0 0 10px;
+            font-size: 16px;
+        }
+
+        .popup-content p {
+            margin: 5px 0;
+            font-size: 14px;
+        }
+
+        .roles-list {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .role-item {
+            background-color: #f8f9fa;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            padding: 5px 10px; 
+            margin-bottom: 6px; 
+            font-size: 0.9em;
+            transition: background-color 0.3s;
+        }
+
+        .role-item:hover {
+            background-color: #e2e6ea;
+        }
+
+        .member-image {
+            width: 100%;           
+            height: 100px;           
+            object-fit: cover;      
+            border-radius: 10px;     
+            display: block;          
+            margin: 0 auto;      
+        }
+
+        .singer-name {
+            font-size: 1.6em;                  
+            font-weight: 500;                  
+            color: #333;                       
+            text-align: center;                
+            margin: 15px 0;                   
+            text-transform: capitalize;        
+            letter-spacing: 0.3px;            
+            font-family: 'Arial', sans-serif;    
+            position: relative;                
+            transition: color 0.3s ease;     
+        }
+
+        .singer-name:hover {
+            color: #ff6f61; 
+        }
+
+        .singer-name::after {
+            content: '';                       
+            display: block;                   
+            width: 50%;                       
+            height: 2px;                      
+            background-color: rgba(255, 111, 97, 0.5);  
+            margin: 8px auto;                 
+            border-radius: 2px;               
+            transition: width 0.3s ease, background-color 0.3s ease; 
+        }
+
+        .singer-name:hover::after {
+            width: 100%;                      
+            background-color: #ff6f61;           
+        }
+
+        .members-title {
+            font-size: 2.2em;                         
+            font-weight: 800;                       
+            color: #1a1a1a;                         
+            text-align: center;                     
+            margin: 30px 0;                         
+            text-transform: uppercase;               
+            letter-spacing: 2px;                    
+            font-family: 'Montserrat', sans-serif;     
+            position: relative;                      
+        }
+
+        .members-title::after {
+            content: '';                            
+            display: block;                         
+            width: 70%;                            
+            height: 4px;                           
+            background-color: #e67e22;             
+            margin: 12px auto;                     
+            border-radius: 5px;                    
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);  
+            transition: width 0.3s ease, background-color 0.3s ease;  
+        }
+
+        .members-title:hover::after {
+            width: 100%;                           
+            background-color: #d35400;             
+        }
+
+
     /* ================ Detail ================ */
         .image-container {
             display: flex;
@@ -787,6 +965,7 @@
             border-radius: 10px;
             padding: 10px;
             margin-right: 10px;
+            margin-top: 20px;
             min-width: 150px;
             text-align: center;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -888,51 +1067,18 @@
                 });
             });
 
-
-            window.onload = function () {
-                const memberCards = document.querySelectorAll('.member-card');
-
-                const addClickListener = (card) => {
-                    card.addEventListener('click', function (event) {
-                        console.log('Member card clicked!'); 
-                        const imageUrl = this.dataset.image; 
-                        const name = this.querySelector('h4').innerText;
-                        const role = this.querySelector('p strong + span').innerText;
-                        const age = this.querySelectorAll('p strong + span')[1].innerText;
-
-                        showPopup(event, imageUrl, name, role, age);
+            document.addEventListener('DOMContentLoaded', function () {
+                const memberPopups = document.querySelectorAll('.member-popup');
+                window.addEventListener('click', function(event) {
+                    memberPopups.forEach(popup => {
+                        if (popup && !popup.contains(event.target)) {
+                            popup.classList.add('hidden');
+                        }
                     });
-                };
+                });
+            });
 
-                for (let i = 0; i < memberCards.length; i++) {
-                    addClickListener(memberCards[i]);
-                }
-
-                function showPopup(event, imageUrl, name, role, age) {
-                    const memberPopup = document.getElementById('member-popup');
-                    const popupImage = document.getElementById('popup-image');
-                    const popupName = document.getElementById('popup-name');
-                    const popupRole = document.getElementById('popup-role');
-                    const popupAge = document.getElementById('popup-age');
-
-                    popupImage.src = imageUrl; 
-                    popupName.innerText = name; 
-                    popupRole.innerText = role; 
-                    popupAge.innerText = age; 
-
-                    memberPopup.style.display = 'block'; 
-                    memberPopup.style.left = `${event.pageX + 10}px`;
-                    memberPopup.style.top = `${event.pageY + 10}px`;
-
-                    const hidePopup = () => {
-                        memberPopup.style.display = 'none';
-                        document.removeEventListener('click', hidePopup);
-                    };
-
-                    document.addEventListener('click', hidePopup, { once: true });
-                }
-            };
-
+            
 
     </script>
     

@@ -9,7 +9,10 @@ class KpopMember extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['group_id', 'name', 'role', 'birthdate', 'nationality', 'height', 'weight', 'bio'];
+    protected $fillable = ['group_id', 'name', 'roles', 'member_image'];
+    protected $casts = [
+        'roles' => 'array'
+    ];
 
     public function group()
     {
