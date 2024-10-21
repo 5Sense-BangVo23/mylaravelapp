@@ -3965,7 +3965,7 @@ SET character_set_client = @saved_cs_client;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-10-17  1:56:30
+-- Dump completed on 2024-10-22  0:19:16
 -- MySQL dump 10.13  Distrib 8.0.12, for macos10.13 (x86_64)
 --
 -- Host: 127.0.0.1    Database: mylaraveldb
@@ -4533,6 +4533,41 @@ LOCK TABLES `failed_jobs` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `google_drive_files`
+--
+
+DROP TABLE IF EXISTS `google_drive_files`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+ SET character_set_client = utf8mb4 ;
+CREATE TABLE `google_drive_files` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `file_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `google_drive_id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `mime_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `size` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `google_drive_url` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `parent_folder_id` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `url_type` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `kpop_group_id` bigint unsigned DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `google_drive_files_kpop_group_id_foreign` (`kpop_group_id`),
+  CONSTRAINT `google_drive_files_kpop_group_id_foreign` FOREIGN KEY (`kpop_group_id`) REFERENCES `kpop_groups` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `google_drive_files`
+--
+
+LOCK TABLES `google_drive_files` WRITE;
+/*!40000 ALTER TABLE `google_drive_files` DISABLE KEYS */;
+INSERT INTO `google_drive_files` VALUES (26,'Twice wallpaper ?.jpeg','1-ENx9xxLdDlDuKxOpRMfVPmv1jjQLC1d','application/octet-stream','116810','https://www.googleapis.com/drive/v3/files/1-ENx9xxLdDlDuKxOpRMfVPmv1jjQLC1d?key=AIzaSyDmAipUzGQCHm-kvhTMucJ55PjSJqJw9mw&alt=media',NULL,'cover_file',3,'2024-10-20 12:21:40','2024-10-20 12:21:40'),(27,'「TWICE」おしゃれまとめの人気アイデア｜Pinterest｜Jung Rae Sang _ Twice スタイル, Twice 集合写真, Twice 画像.jpeg','1SUF5hNwrspPwLsKz4abNGID2A1rjRCWu','application/octet-stream','104106','https://www.googleapis.com/drive/v3/files/1SUF5hNwrspPwLsKz4abNGID2A1rjRCWu?key=AIzaSyDmAipUzGQCHm-kvhTMucJ55PjSJqJw9mw&alt=media',NULL,'thumbnails_file',3,'2024-10-20 12:21:44','2024-10-20 12:21:44');
+/*!40000 ALTER TABLE `google_drive_files` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `kpop_accounts`
 --
 
@@ -4723,12 +4758,16 @@ CREATE TABLE `kpop_groups` (
   `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `debut_date` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `agency` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `thumbnails` json DEFAULT NULL,
+  `cover_image` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `profile_image` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `description` text COLLATE utf8mb4_unicode_ci,
   `genre` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `active` tinyint(1) NOT NULL DEFAULT '0',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -4737,7 +4776,7 @@ CREATE TABLE `kpop_groups` (
 
 LOCK TABLES `kpop_groups` WRITE;
 /*!40000 ALTER TABLE `kpop_groups` DISABLE KEYS */;
-INSERT INTO `kpop_groups` VALUES (3,'Twice','2015-10-20','JYP Entertainment','Nhóm nhạc nữ với nhiều ca khúc hit.','Pop','2024-10-16 10:44:59','2024-10-16 10:44:59'),(5,'Black Pink','2016-08-08','YG Entertainment',NULL,NULL,'2024-10-16 17:57:24','2024-10-16 17:57:24'),(6,'(G)I-DLE','2018-05-02','CUBE Entertainment',NULL,NULL,'2024-10-16 17:59:02','2024-10-16 17:59:02'),(7,'AOA','2012-07-30','FNC Entertainment',NULL,NULL,'2024-10-16 18:00:57','2024-10-16 18:00:57'),(8,'IVE','2021-12-01','Starship Entertainment',NULL,NULL,'2024-10-16 18:02:46','2024-10-16 18:02:46'),(9,'MOMOLAND','2016-11-10','MLD Entertainment',NULL,NULL,'2024-10-16 18:04:40','2024-10-16 18:04:40'),(10,'Aespa','2020-11-17','SM Entertainment',NULL,NULL,'2024-10-16 18:06:53','2024-10-16 18:06:53'),(11,'LE SSERAFIM','2022-05-02','Source Music',NULL,NULL,'2024-10-16 18:08:43','2024-10-16 18:08:43'),(12,'ITZY','2019-02-12','JYP Entertainment',NULL,NULL,'2024-10-16 18:12:44','2024-10-16 18:12:44'),(13,'OH MY GIRL','2015-04-21','WM Entertainment',NULL,NULL,'2024-10-16 18:17:02','2024-10-16 18:17:02'),(14,'Girl\'s Day','2010-07-09','Dream Tea Entertainment',NULL,NULL,'2024-10-16 18:18:37','2024-10-16 18:18:37'),(15,'NewJeans ','2022-08-22','ADOR',NULL,NULL,'2024-10-16 18:20:50','2024-10-16 18:20:50'),(16,'KISS OF LIFE','2022-08-08','Jellyfish Entertainment',NULL,NULL,'2024-10-16 18:22:29','2024-10-16 18:22:29'),(17,'FIFTY FIFTY','2022-11-18','Attract Entertainment',NULL,NULL,'2024-10-16 18:24:15','2024-10-16 18:24:15'),(18,'Red Velvet','2014-08-01','SM Entertainment',NULL,NULL,'2024-10-16 18:26:05','2024-10-16 18:26:05'),(19,'SNSD ','2007-08-05','SM Entertainment',NULL,NULL,'2024-10-16 18:28:15','2024-10-16 18:28:15'),(20,'T-ara','2009-07-07','MBK Entertainment',NULL,NULL,'2024-10-16 18:29:06','2024-10-16 18:29:06'),(21,'EXID','2012-08-16','LE and Banana Culture',NULL,NULL,'2024-10-16 18:30:41','2024-10-16 18:30:41'),(22,'Apink','2011-04-19','Play M Entertainment',NULL,NULL,'2024-10-16 18:31:38','2024-10-16 18:31:38'),(23,'MEOVV','2023-05-17','MYSTIC STORY',NULL,NULL,'2024-10-16 18:33:46','2024-10-16 18:33:46'),(24,'Say My Name','2021-06-04','S2 Entertainment',NULL,NULL,'2024-10-16 18:34:28','2024-10-16 18:34:28'),(25,'2NE1','2009-05-17','YG Entertainment',NULL,NULL,'2024-10-16 18:36:44','2024-10-16 18:36:44'),(26,'f(x)','2014-09-05','SM Entertainment',NULL,NULL,'2024-10-16 18:38:57','2024-10-16 18:38:57'),(27,'ILLIT','2021-11-15','DB Entertainment',NULL,NULL,'2024-10-16 18:40:56','2024-10-16 18:40:56'),(28,'NMIXX','2022-02-22','JYP Entertainment',NULL,NULL,'2024-10-16 18:42:37','2024-10-16 18:42:37'),(29,'Baby Monster','2023-09-10','YG Entertainment',NULL,NULL,'2024-10-16 18:43:42','2024-10-16 18:43:42'),(30,'Billlie','2021-09-10','Mystic Story',NULL,NULL,'2024-10-16 18:49:21','2024-10-16 18:49:21'),(31,'Kep1er','2022-01-03','C9 Entertainment and Wake One Entertainment',NULL,NULL,'2024-10-16 18:51:42','2024-10-16 18:51:42'),(32,'GFRIEND','2015-01-16','Source Music',NULL,NULL,'2024-10-16 18:52:46','2024-10-16 18:52:46');
+INSERT INTO `kpop_groups` VALUES (3,'Twice','2015-10-20','JYP Entertainment','[\"https://www.googleapis.com/drive/v3/files/1SUF5hNwrspPwLsKz4abNGID2A1rjRCWu?key=AIzaSyDmAipUzGQCHm-kvhTMucJ55PjSJqJw9mw&alt=media\"]','https://www.googleapis.com/drive/v3/files/1-ENx9xxLdDlDuKxOpRMfVPmv1jjQLC1d?key=AIzaSyDmAipUzGQCHm-kvhTMucJ55PjSJqJw9mw&alt=media',NULL,'Nhóm nhạc nữ với nhiều ca khúc hit.','Pop',1,'2024-10-16 10:44:59','2024-10-20 12:21:44'),(5,'Black Pink','2016-08-08','YG Entertainment',NULL,NULL,NULL,NULL,NULL,0,'2024-10-16 17:57:24','2024-10-17 16:38:41'),(6,'(G)I-DLE','2018-05-02','CUBE Entertainment',NULL,NULL,NULL,NULL,NULL,0,'2024-10-16 17:59:02','2024-10-17 19:49:12'),(7,'AOA','2012-07-30','FNC Entertainment',NULL,NULL,NULL,NULL,NULL,1,'2024-10-16 18:00:57','2024-10-17 20:13:27'),(8,'IVE','2021-12-01','Starship Entertainment',NULL,NULL,NULL,NULL,NULL,0,'2024-10-16 18:02:46','2024-10-19 18:39:15'),(9,'MOMOLAND','2016-11-10','MLD Entertainment',NULL,NULL,NULL,NULL,NULL,0,'2024-10-16 18:04:40','2024-10-16 18:04:40'),(10,'Aespa','2020-11-17','SM Entertainment',NULL,NULL,NULL,NULL,NULL,0,'2024-10-16 18:06:53','2024-10-16 18:06:53'),(11,'LE SSERAFIM','2022-05-02','Source Music',NULL,NULL,NULL,NULL,NULL,0,'2024-10-16 18:08:43','2024-10-16 18:08:43'),(12,'ITZY','2019-02-12','JYP Entertainment',NULL,NULL,NULL,NULL,NULL,0,'2024-10-16 18:12:44','2024-10-16 18:12:44'),(13,'OH MY GIRL','2015-04-21','WM Entertainment',NULL,NULL,NULL,NULL,NULL,0,'2024-10-16 18:17:02','2024-10-16 18:17:02'),(14,'Girl\'s Day','2010-07-09','Dream Tea Entertainment',NULL,NULL,NULL,NULL,NULL,0,'2024-10-16 18:18:37','2024-10-16 18:18:37'),(15,'NewJeans ','2022-08-22','ADOR',NULL,NULL,NULL,NULL,NULL,0,'2024-10-16 18:20:50','2024-10-16 18:20:50'),(16,'KISS OF LIFE','2022-08-08','Jellyfish Entertainment',NULL,NULL,NULL,NULL,NULL,0,'2024-10-16 18:22:29','2024-10-16 18:22:29'),(17,'FIFTY FIFTY','2022-11-18','Attract Entertainment',NULL,NULL,NULL,NULL,NULL,0,'2024-10-16 18:24:15','2024-10-16 18:24:15'),(18,'Red Velvet','2014-08-01','SM Entertainment',NULL,NULL,NULL,NULL,NULL,0,'2024-10-16 18:26:05','2024-10-16 18:26:05'),(19,'SNSD ','2007-08-05','SM Entertainment',NULL,NULL,NULL,NULL,NULL,0,'2024-10-16 18:28:15','2024-10-16 18:28:15'),(20,'T-ara','2009-07-07','MBK Entertainment',NULL,NULL,NULL,NULL,NULL,0,'2024-10-16 18:29:06','2024-10-16 18:29:06'),(21,'EXID','2012-08-16','LE and Banana Culture',NULL,NULL,NULL,NULL,NULL,0,'2024-10-16 18:30:41','2024-10-16 18:30:41'),(22,'Apink','2011-04-19','Play M Entertainment',NULL,NULL,NULL,NULL,NULL,0,'2024-10-16 18:31:38','2024-10-16 18:31:38'),(23,'MEOVV','2023-05-17','MYSTIC STORY',NULL,NULL,NULL,NULL,NULL,0,'2024-10-16 18:33:46','2024-10-16 18:33:46'),(24,'Say My Name','2021-06-04','S2 Entertainment',NULL,NULL,NULL,NULL,NULL,0,'2024-10-16 18:34:28','2024-10-16 18:34:28'),(25,'2NE1','2009-05-17','YG Entertainment',NULL,NULL,NULL,NULL,NULL,0,'2024-10-16 18:36:44','2024-10-16 18:36:44'),(26,'f(x)','2014-09-05','SM Entertainment',NULL,NULL,NULL,NULL,NULL,0,'2024-10-16 18:38:57','2024-10-16 18:38:57'),(27,'ILLIT','2021-11-15','DB Entertainment',NULL,NULL,NULL,NULL,NULL,0,'2024-10-16 18:40:56','2024-10-16 18:40:56'),(28,'NMIXX','2022-02-22','JYP Entertainment',NULL,NULL,NULL,NULL,NULL,0,'2024-10-16 18:42:37','2024-10-16 18:42:37'),(29,'Baby Monster','2023-09-10','YG Entertainment',NULL,NULL,NULL,NULL,NULL,0,'2024-10-16 18:43:42','2024-10-16 18:43:42'),(30,'Billlie','2021-09-10','Mystic Story',NULL,NULL,NULL,NULL,NULL,0,'2024-10-16 18:49:21','2024-10-16 18:49:21'),(31,'Kep1er','2022-01-03','C9 Entertainment and Wake One Entertainment',NULL,NULL,NULL,NULL,NULL,0,'2024-10-16 18:51:42','2024-10-16 18:51:42'),(32,'GFRIEND','2015-01-16','Source Music',NULL,NULL,NULL,NULL,NULL,0,'2024-10-16 18:52:46','2024-10-16 18:52:46'),(33,'Twice','2015-10-20','JYP Entertainment',NULL,NULL,NULL,NULL,NULL,0,'2024-10-16 20:14:02','2024-10-16 20:14:02'),(34,'Twice','2015-10-20','JYP Entertainment',NULL,NULL,NULL,NULL,NULL,0,'2024-10-16 20:14:10','2024-10-16 20:14:10');
 /*!40000 ALTER TABLE `kpop_groups` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -4750,15 +4789,16 @@ DROP TABLE IF EXISTS `kpop_members`;
  SET character_set_client = utf8mb4 ;
 CREATE TABLE `kpop_members` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `group_id` bigint unsigned NOT NULL,
+  `kpop_group_id` bigint unsigned DEFAULT NULL,
   `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `role` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `roles` json DEFAULT NULL,
+  `member_image` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `kpop_members_group_id_foreign` (`group_id`),
-  CONSTRAINT `kpop_members_group_id_foreign` FOREIGN KEY (`group_id`) REFERENCES `kpop_groups` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  KEY `kpop_members_kpop_group_id_foreign` (`kpop_group_id`),
+  CONSTRAINT `kpop_members_kpop_group_id_foreign` FOREIGN KEY (`kpop_group_id`) REFERENCES `kpop_groups` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -4767,7 +4807,7 @@ CREATE TABLE `kpop_members` (
 
 LOCK TABLES `kpop_members` WRITE;
 /*!40000 ALTER TABLE `kpop_members` DISABLE KEYS */;
-INSERT INTO `kpop_members` VALUES (10,3,'Nayeon','Lead Vocalist','2024-10-16 10:49:23','2024-10-16 10:49:23'),(11,3,'Jeongyeon','Lead Vocalist','2024-10-16 10:49:23','2024-10-16 10:49:23'),(12,3,'Momo','Main Dancer','2024-10-16 10:49:23','2024-10-16 10:49:23'),(13,3,'Sana','Vocalist','2024-10-16 10:49:23','2024-10-16 10:49:23'),(14,3,'Jihyo','Main Vocalist','2024-10-16 10:49:23','2024-10-16 10:49:23'),(15,3,'Dahyun','Lead Rapper','2024-10-16 10:49:23','2024-10-16 10:49:23'),(16,3,'Chaeyoung','Main Rapper','2024-10-16 10:49:23','2024-10-16 10:49:23'),(17,3,'Tzuyu','Visual','2024-10-16 10:49:23','2024-10-16 10:49:23');
+INSERT INTO `kpop_members` VALUES (18,3,'Momo','[\"Main Dancer\", \"Sub Vocalist\", \"Visual\"]','https://www.googleapis.com/drive/v3/files/1TFqUd08dvrvOe3NzJzIyH6kUJNaq7iq7?key=AIzaSyDmAipUzGQCHm-kvhTMucJ55PjSJqJw9mw&alt=media',NULL,NULL),(19,3,'Sana','[\"Vocals\"]','https://www.googleapis.com/drive/v3/files/1yP-eFbRxudRKygNIw5kTcNMaivJcxecW?key=AIzaSyDmAipUzGQCHm-kvhTMucJ55PjSJqJw9mw&alt=media',NULL,NULL),(20,3,'Tzuyu','[\"Dancer\"]','https://www.googleapis.com/drive/v3/files/1CqANQob-xfWFQLEcgb4MN5HwVwJCrc94?key=AIzaSyDmAipUzGQCHm-kvhTMucJ55PjSJqJw9mw&alt=media',NULL,NULL),(21,3,'Nayeon','[\"Dancer\"]','https://www.googleapis.com/drive/v3/files/1BLumdW4N1dzc2paXVn8TuhxzIOkptKlh?key=AIzaSyDmAipUzGQCHm-kvhTMucJ55PjSJqJw9mw&alt=media',NULL,NULL),(22,3,'Jeongyeon','[\"Vocals\"]','https://www.googleapis.com/drive/v3/files/1C1ZERqAH1Y4WTKyE3j2FVxGq7oGa32Qh?key=AIzaSyDmAipUzGQCHm-kvhTMucJ55PjSJqJw9mw&alt=media',NULL,NULL),(23,3,'Mina','[\"Dancer\"]','https://www.googleapis.com/drive/v3/files/1NavlRTFGhcq8kj1kzWWcjgUPX5mdtCgW?key=AIzaSyDmAipUzGQCHm-kvhTMucJ55PjSJqJw9mw&alt=media',NULL,NULL),(24,3,'Jihyo','[\"Lead vocalist\"]','https://www.googleapis.com/drive/v3/files/1o4Jqc6va2jBtoibrSfyCEzGsVUaSoGNV?key=AIzaSyDmAipUzGQCHm-kvhTMucJ55PjSJqJw9mw&alt=media',NULL,NULL),(25,3,'Chaeyoung','[\"Rapper\"]','https://www.googleapis.com/drive/v3/files/1X756cGV6HWzaLr7ujpzrQY4I9UkRyoOg?key=AIzaSyDmAipUzGQCHm-kvhTMucJ55PjSJqJw9mw&alt=media',NULL,NULL),(26,3,'Dahyun','[\"Rapper\"]','https://www.googleapis.com/drive/v3/files/1VC2LkPbpkS0Vie3gau7ZslthN34Irqxg?key=AIzaSyDmAipUzGQCHm-kvhTMucJ55PjSJqJw9mw&alt=media',NULL,NULL);
 /*!40000 ALTER TABLE `kpop_members` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -5002,7 +5042,7 @@ CREATE TABLE `migrations` (
   `migration` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `batch` int NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=85 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=97 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -5011,7 +5051,7 @@ CREATE TABLE `migrations` (
 
 LOCK TABLES `migrations` WRITE;
 /*!40000 ALTER TABLE `migrations` DISABLE KEYS */;
-INSERT INTO `migrations` VALUES (1,'2014_10_12_000000_create_users_table',1),(2,'2014_10_12_100000_create_password_reset_tokens_table',1),(3,'2016_01_04_173148_create_admin_tables',1),(4,'2019_08_19_000000_create_failed_jobs_table',1),(5,'2019_12_14_000001_create_personal_access_tokens_table',1),(58,'2020_06_14_000001_create_media_table_new',2),(59,'2024_03_01_035331_create_cmn_contents_table',2),(60,'2024_03_01_104128_create_blg_comments_table',2),(61,'2024_03_01_104415_add_relationship_between_blg_comments_and_users',2),(62,'2024_03_01_104743_add_relationship_between_blg_posts_and_users',2),(63,'2024_03_01_105044_add_relationship_between_blg_comments_and_blg_posts_table',2),(64,'2024_03_01_105245_create_blg_images_table',2),(65,'2024_04_08_031004_create_cmn_banners_table',2),(66,'2024_04_08_043435_create_mst_content_classes_table',2),(67,'2024_04_08_043436_create_blg_categories_table_new',2),(68,'2024_04_08_061850_create_blg_post_classes_table',2),(69,'2024_04_08_062637_add_relation_between_blg_post_classes_and_blg_posts',2),(70,'2024_05_03_053916_add_common_id_to_post_table',2),(71,'2024_05_03_102009_rename_content_column_in_blg_posts_table',2),(72,'2024_05_03_153634_create_cmn_searches_table',2),(73,'2024_05_03_154637_create_mst_publish_statuses_table',2),(74,'2024_05_04_071146_add_field_remember_password_from_users_table',3),(75,'2024_05_05_171747_create_uploaded_files_table',4),(76,'2024_06_14_170318_add_field_is_send_mail_to_users_table',4),(77,'2024_06_14_202715_add_field_token_expires_at_to_users_table',4),(78,'2024_10_05_192423_add_new_kpop_accounts_table',4),(84,'2024_10_16_085555_add_new_kpop_info_table',5);
+INSERT INTO `migrations` VALUES (1,'2014_10_12_000000_create_users_table',1),(2,'2014_10_12_100000_create_password_reset_tokens_table',1),(3,'2016_01_04_173148_create_admin_tables',1),(4,'2019_08_19_000000_create_failed_jobs_table',1),(5,'2019_12_14_000001_create_personal_access_tokens_table',1),(58,'2020_06_14_000001_create_media_table_new',2),(59,'2024_03_01_035331_create_cmn_contents_table',2),(60,'2024_03_01_104128_create_blg_comments_table',2),(61,'2024_03_01_104415_add_relationship_between_blg_comments_and_users',2),(62,'2024_03_01_104743_add_relationship_between_blg_posts_and_users',2),(63,'2024_03_01_105044_add_relationship_between_blg_comments_and_blg_posts_table',2),(64,'2024_03_01_105245_create_blg_images_table',2),(65,'2024_04_08_031004_create_cmn_banners_table',2),(66,'2024_04_08_043435_create_mst_content_classes_table',2),(67,'2024_04_08_043436_create_blg_categories_table_new',2),(68,'2024_04_08_061850_create_blg_post_classes_table',2),(69,'2024_04_08_062637_add_relation_between_blg_post_classes_and_blg_posts',2),(70,'2024_05_03_053916_add_common_id_to_post_table',2),(71,'2024_05_03_102009_rename_content_column_in_blg_posts_table',2),(72,'2024_05_03_153634_create_cmn_searches_table',2),(73,'2024_05_03_154637_create_mst_publish_statuses_table',2),(74,'2024_05_04_071146_add_field_remember_password_from_users_table',3),(75,'2024_05_05_171747_create_uploaded_files_table',4),(76,'2024_06_14_170318_add_field_is_send_mail_to_users_table',4),(77,'2024_06_14_202715_add_field_token_expires_at_to_users_table',4),(78,'2024_10_05_192423_add_new_kpop_accounts_table',4),(84,'2024_10_16_085555_add_new_kpop_info_table',5),(85,'2014_10_12_200000_add_two_factor_columns_to_users_table',6),(86,'2024_10_16_190638_add_images_to_kpop_groups_table',6),(88,'2024_10_17_183314_add_active_to_kpop_groups_table',7),(89,'2024_10_19_181510_add_new_kpop_info_table',8),(93,'2024_10_19_191513_create_google_drive_files_table',9),(94,'2024_10_20_124250_add_group_id_to_kpop_members_table',10),(95,'2024_10_21_044128_add_member_image_to_kpop_members_table',11),(96,'2024_10_21_064025_add_roles_to_kpop_members_table',12);
 /*!40000 ALTER TABLE `migrations` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -5165,6 +5205,8 @@ CREATE TABLE `users` (
   `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `email_verified_at` timestamp NULL DEFAULT NULL,
   `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `two_factor_secret` text COLLATE utf8mb4_unicode_ci,
+  `two_factor_recovery_codes` text COLLATE utf8mb4_unicode_ci,
   `remember_password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `remember_token` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -5180,7 +5222,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (3,'Bang','bang@gmail.com',NULL,'$2y$12$myHAfW8n0s9kYqtBQ3YcDOLreoDWrOiCWECmpSrpvrMo74dEn6jCK','abc@#123',NULL,'2024-05-04 07:10:17','2024-05-04 07:10:17'),(4,'Ha','ha@gmail.com',NULL,'$2y$12$kvLclr2pSSgGqA6MAv54aOAajkQwuVT8A5scwIzXJ3mG6Rv8SaZ5i','abc@#123',NULL,'2024-05-04 07:22:57','2024-05-04 07:22:57'),(5,'Guest','guest@gmail.com',NULL,'$2y$12$Bxo5nNTQmkc4Fe6K1sd3Qei23UqwIAXqKPPv9nBRbSTUUxjEk79CG','abc@#123',NULL,'2024-05-04 07:29:00','2024-05-04 07:29:00'),(6,'UserA','usera@gmail.com',NULL,'$2y$12$9gKNEVU7r0TypN50Uzu1ieqWcfC6.TkEPNz8k4fb.o8ihHVYUbE66','abc@#123',NULL,'2024-05-04 07:32:59','2024-05-04 07:32:59');
+INSERT INTO `users` VALUES (3,'Bang','bang@gmail.com',NULL,'$2y$12$myHAfW8n0s9kYqtBQ3YcDOLreoDWrOiCWECmpSrpvrMo74dEn6jCK',NULL,NULL,'abc@#123',NULL,'2024-05-04 07:10:17','2024-05-04 07:10:17'),(4,'Ha','ha@gmail.com',NULL,'$2y$12$kvLclr2pSSgGqA6MAv54aOAajkQwuVT8A5scwIzXJ3mG6Rv8SaZ5i',NULL,NULL,'abc@#123',NULL,'2024-05-04 07:22:57','2024-05-04 07:22:57'),(5,'Guest','guest@gmail.com',NULL,'$2y$12$Bxo5nNTQmkc4Fe6K1sd3Qei23UqwIAXqKPPv9nBRbSTUUxjEk79CG',NULL,NULL,'abc@#123',NULL,'2024-05-04 07:29:00','2024-05-04 07:29:00'),(6,'UserA','usera@gmail.com',NULL,'$2y$12$9gKNEVU7r0TypN50Uzu1ieqWcfC6.TkEPNz8k4fb.o8ihHVYUbE66',NULL,NULL,'abc@#123',NULL,'2024-05-04 07:32:59','2024-05-04 07:32:59');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -5193,4 +5235,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-10-17  1:56:31
+-- Dump completed on 2024-10-22  0:19:18
