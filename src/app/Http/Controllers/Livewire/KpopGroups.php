@@ -11,16 +11,13 @@ use Exception;
 class KpopGroups extends Component
 {
     use WithFileUploads;
+
+    // Constants for field rendering
     const RENDER_DATA_FIELDS = [
-        'id',
-        'active',
-        'name', 
-        'debut_date', 
-        'agency',
-        'cover_image',
-        'profile_image',
-        'thumbnails'
+        'id', 'active', 'name', 'debut_date', 'agency', 'cover_image', 'profile_image', 'thumbnails'
     ];
+
+    // Public properties
     public $groups, $group_id, $name, $debut_date, $cover_image, $profile_image, $agency;
     public $thumbnails = [];
     public $isOpen = false;
@@ -30,8 +27,10 @@ class KpopGroups extends Component
     public $closeButtonColor = 'text-gray-800';
     public $selectedMember;
     public $closePopup = false; 
+
+    // Service Injection
     protected $googleDriveService;
-    
+
     public function __construct()
     {
         $this->googleDriveService = new GoogleDriveService();
@@ -40,7 +39,7 @@ class KpopGroups extends Component
     public function mount()
     {
         $this->groups = KpopGroup::with('googleDriveFiles')->select('id', 'active', 'name', 'debut_date', 'agency')->get();
-        $this->isDetailOpen = false; 
+        $this->isDetailOpen = false;
     }
 
     public function rules()
@@ -52,12 +51,14 @@ class KpopGroups extends Component
         ];
     }
 
+    // Method to create a new group
     public function create()
     {
         $this->resetInput();
         $this->isOpen = true;
     }
 
+    // Method to edit an existing group
     public function edit($id)
     {
         $group = KpopGroup::findOrFail($id);
@@ -71,30 +72,57 @@ class KpopGroups extends Component
         $this->isOpen = true;
     }
 
+    // Method to view the group details
     public function viewDetail($id)
     {
         $this->detailGroup = KpopGroup::with('googleDriveFiles')->findOrFail($id);
         $this->isDetailOpen = true;
     }
 
+    // Method to close group details
     public function closeDetail()
     {
         $this->isDetailOpen = false;
     }
 
+    // Method to save a new or edited group
     public function save()
     {
-        $group = $this->group_id ? KpopGroup::findOrFail($this->group_id) : new KpopGroup;
-        $group->name = $this->name;
-        $group->debut_date = $this->debut_date;
-        $group->agency = $this->agency;
-
         $this->validate([
             'name' => 'required|string',
             'debut_date' => 'required|date',
             'agency' => 'required|string',
         ]);
 
+        // If editing an existing group, find it
+        $group = $this->group_id ? KpopGroup::findOrFail($this->group_id) : new KpopGroup;
+        $group->name = $this->name;
+        $group->debut_date = $this->debut_date;
+        $group->agency = $this->agency;
+
+        // Handle file uploads
+        $this->handleFileUpload($group);
+
+        // Save thumbnails
+        if (is_array($this->thumbnails)) {
+            $thumbnailPaths = $this->uploadThumbnails($group->id);
+            $existingThumbnails = json_decode($group->thumbnails, true) ?? [];
+            $group->thumbnails = json_encode(array_merge($existingThumbnails, $thumbnailPaths));
+        }
+
+        // Save the group data
+        $group->save();
+
+        // Reset the form and close modal
+        $this->resetInput();
+        $this->closeModal();
+        $this->emit('groupUpdated');
+        $this->formSubmitted = true;
+    }
+
+    // Handle file upload for images
+    private function handleFileUpload($group)
+    {
         if ($this->cover_image instanceof \Illuminate\Http\UploadedFile) {
             $googleDriveFile_cover = $this->googleDriveService->uploadFile($this->cover_image, $group->id, 'cover_file');
             if ($googleDriveFile_cover) {
@@ -108,21 +136,10 @@ class KpopGroups extends Component
                 $group->profile_image = $googleDriveFile_profile->google_drive_url;
             }
         }
-
-        if (is_array($this->thumbnails)) {
-            $thumbnailPaths = $this->uploadThumbnails($group->id);
-            $existingThumbnails = json_decode($group->thumbnails, true) ?? [];
-            $group->thumbnails = json_encode(array_merge($existingThumbnails, $thumbnailPaths));
-        }
-
-        $group->save();
-        $this->resetInput();
-        $this->closeModal();
-        $this->emit('groupUpdated');
-        $this->formSubmitted = true;
     }
 
-    public function uploadThumbnails($group_id)
+    // Upload thumbnail images
+    private function uploadThumbnails($group_id)
     {
         $paths = [];
         foreach ($this->thumbnails as $thumbnail) {
@@ -136,35 +153,39 @@ class KpopGroups extends Component
         return $paths;
     }
 
+    // Toggle the active status of a group
     public function toggleActive($groupId)
     {
         $group = KpopGroup::find($groupId);
-        if ($group) {
-            $group->active = !$group->active;
-            $group->save();
-        }
+        $group->active = !$group->active; // Toggle the active status
+        $group->save();
+
+        // Optional: Add a notification or alert here
+        session()->flash('message', 'Group status updated successfully!');
     }
 
+
+    // Toggle the detail view sidebar
     public function toggleDetail()
     {
-        $this->isDetailOpen = !$this->isDetailOpen; 
+        $this->isDetailOpen = !$this->isDetailOpen;
         $this->dispatchBrowserEvent('toggleSidebar');
     }
 
+    // Close the modal
     public function closeModal()
     {
         $this->isOpen = false;
     }
 
+    // Open member detail popup
     public function openMemberDetail($memberId)
     {
         $this->selectedMember = $this->detailGroup->members->find($memberId);
-        $this->closePopup = false; 
+        $this->closePopup = false;
     }
 
-   
-
-
+    // Reset form input fields
     public function resetInput()
     {
         $this->name = '';
@@ -175,11 +196,10 @@ class KpopGroups extends Component
         $this->thumbnails = [];
     }
 
+    // Render the component view
     public function render()
     {
-        $this->groups = KpopGroup::with('googleDriveFiles')->select(
-            self::RENDER_DATA_FIELDS
-        )->get();
+        $this->groups = KpopGroup::with('googleDriveFiles')->select(self::RENDER_DATA_FIELDS)->get();
         return view('livewire.kpop-groups');
     }
 }
